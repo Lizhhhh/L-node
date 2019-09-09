@@ -1,5 +1,5 @@
 {
-  "name": "C-03",
+  "name": "practice-film",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -10,9 +10,9 @@
   "author": "lizhhhh <543288744@qq.com>",
   "license": "ISC",
   "devDependencies": {
-    "jsonwebtoken": "^8.5.1",
-    "koa": "^2.8.1",
-    "koa-jwt": "^3.6.0",
-    "koa-router": "^7.4.0"
+    "koa": "^2.5.0",
+    "koa-bodyparser": "^4.2.0",
+    "koa-router": "^7.4.0",
+    "koa-static": "^4.0.2"
   }
 }
