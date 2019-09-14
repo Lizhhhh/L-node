@@ -1,8 +1,8 @@
 {
-  "name": "C-05",
+  "name": "koa-router",
   "version": "1.0.0",
   "description": "",
-  "main": "1、express-nunjucks.js",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -10,8 +10,6 @@
   "author": "lizhhhh <543288744@qq.com>",
   "license": "ISC",
   "devDependencies": {
-    "koa": "^2.8.1",
-    "koa-nunjucks-2": "^3.0.2",
     "koa-router": "^7.4.0"
   }
 }
