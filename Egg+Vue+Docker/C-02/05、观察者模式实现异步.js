@@ -1,7 +1,7 @@
 function create(fn) {
     let ret = false;
-    return ({ next, complete, errpr }) => {
-        function newxFn(...args) {
+    return ({ next, complete, error }) => {
+        function nextFn(...args) {
             if (ret) {
                 return;
             }
@@ -28,6 +28,8 @@ let observerable = create(observer => {
     setTimeout(() => {
         observer.next(1);
     }, 1 * 1000);
+    observer.next(2);
+    observer.complete(3);
 })
 const subject = {
     next: value => {

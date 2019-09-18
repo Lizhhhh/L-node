@@ -1,0 +1,15 @@
+{
+  "name": "use-middleware",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "lizhhhh <543288744@qq.com>",
+  "license": "ISC",
+  "dependencies": {
+    "koa": "^2.8.1",
+    "koa-useragent": "^2.0.0"
+  }
+}
