@@ -9,10 +9,12 @@ if (!filename) {
 
 net.createServer(connection => {
     console.log('Subscriber connected.');
-    connection.write(`Now watching "${filename}" for changes...\n`);
+    connection.write(JSON.stringify({ type: 'watching', file: filename }) + '\n');
 
     const watcher =
-        fs.watch(filename, () => connection.write(`File changed: ${new Date()} \n`));
+        fs.watch(filename, () => connection.write(
+            JSON.stringify({ type: 'changed', timestamp: Date.now() } + '\n')
+        ));
 
     connection.on('close', () => {
         console.log('Subscriber disconnected.');
