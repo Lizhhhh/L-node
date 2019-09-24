@@ -190,5 +190,94 @@ app
 })
 ```
 
-# koa-router 实现多级路由
+# koa-router 前缀
+  + prefix
+```
+const router = new Router({
+  prefix: '/lzhhc'
+})
+router
+.get('/',(ctx,next)=>{
+  ctx.body = 'Hello lzhhc'
+})
+
+// 此时访问需要 http://127.0.0.1:3000/lzhhc
+```
+
+# 子路由挂载到父路由
+```
+// 子路由
+const home = new Router();
+const page = new Router();
+home.get('/lzhhc', async (ctx) => {
+    ctx.body = 'home lzhhc'
+})
+page.get('/lzhhc', async (ctx) => {
+    ctx.body = 'page lzhhc'
+})
+
+// 父路由挂载子路由
+const router = new Router();
+router
+    .use('/home', home.routes(), home.allowedMethods())
+    .use('/page', page.routes(), page.allowedMethods())
+```
+
+# 返回 cookie
+```
+router
+.get('/index', async (ctx, next) => {
+    ctx.cookies.set(
+        'name', 'lzhhc', {
+            domain: '127.0.0.1',
+            path: '/index',
+            maxAge: 1 * 1000 * 60 * 60 * 24,
+            expires: new Date('2019-12-31'),
+            httpOnly: false,
+            overwrite: false
+        }
+    );
+    ctx.body = 'cookie is ok'
+})
+```
+
+# 读取 cookie
+```
+router
+.get('/', async (ctx, next) => {
+    if (ctx.cookies.name) {
+        ctx.body = ctx.cookies.get('name');
+    } else {
+        ctx.body = 'no cookie'
+    }
+})
+```
+
+# 模板引擎 ejs
+1. cnpm install --save koa-views ejs
+2. 导入&&挂载&&引用
+```
+const views = require('koa-views');
+const path = require('path');
+
+app
+.use(views(path.join(__dirname, './view'),{
+  extension:'ejs'
+}))
+.use(async (ctx,next)=>{
+  const title = 'Hi lzhhc';
+  await ctx.render('index',{title})
+})
+```
+
+# 配置静态文件
+1. cnpm install --save koa-static
+2. 导入&&挂载&&引用
+```
+const static = require('koa-static');
+const staticPath = './static';
+app.use(static(path.join(__dirname, staticPath)))
+```
+   + 假设在/static 下有一张 static/2ha.jpg
+   + 可以在 localhost:3000/2ha.jpg下访问到
 
