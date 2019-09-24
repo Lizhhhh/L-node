@@ -135,12 +135,51 @@ db.login.insert(jsonDatabase);
 print('[demo]':log print success');
 ```
 
+# $push
+  - 给小王的interest里面添加一个draw
+```
+db.workmate.update({"name":"xiaowang"},{"$input":{"interest":"draw"}})
+```
+  - 在小王的第4个技能下添加一个skill.skillFour:"draw"
+```
+db.workmate.update({"name":"xiaowang"}.{"$input":{"skill.skillFour":"draw"}})
+```
 
+# $ne
+  - 无则添加,有则不添加
+  - 给小王添加一个interest:'palygame',没有则添加,有则不添加
+```
+db.workmate.update({"name":"xiaowang",interest:{"$ne":"game"}},{"$input":{interest:"playgame"}})
+```
 
+# $addToSet
+  - 如果小王有interest:'readBook'则不添加,
+  - 如果小王无interset:'readBook',则添加
+```
+db.workmate.update({"name":"xiaowang"},{$addToSet:{interest:"readBook"}})
+```
 
+# $each
+  - 给小王添加兴趣组
+  - ['Singing','Dancing','Coding']
+```
+const interestArr = ['Singing','Dancing','Coding'];
+db.workmate.update({"name":"xiaowang"},{$addToSet:{interest:{$each:interestArr}}})
+```
 
+# $pop
+  -  1: 从数组末端进行删除
+  - -1: 从数组开头开始删除
+```
+db.worker.update({name:'xiaowang'},{$pop:{interest:1}})
+```
 
-
+# $set
+  - 数组的定位修改
+  - 将lzhhhh1的第2个技能改为wps
+```
+db.worker.update({name:'lzhhhh1'},{$set:{"skill.1":"wps"}});
+```
 
 
 
