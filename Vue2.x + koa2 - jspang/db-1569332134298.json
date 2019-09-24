@@ -1,0 +1,231 @@
+{
+  "advertesPicture": [
+    {
+      "PICTURE_ADDRESS": "http://images.baixingliangfan.cn/advertesPicture/20180404/20180404085441_850.gif"
+    }
+  ],
+  "category": [
+    {
+      "mallCategoryId": "1",
+      "mallCategoryName": "新鲜水果",
+      "bxMallSubDto": [
+        {
+          "mallSubId": "2c9f6c946016ea9b016016f79c8e0000",
+          "mallCategoryId": "1",
+          "mallSubName": "热带水果",
+          "comments": null
+        },
+        {
+          "mallSubId": "2c9f6c94608ff843016095163b8c0177",
+          "mallCategoryId": "1",
+          "mallSubName": "时令水果",
+          "comments": null
+        },
+        {
+          "mallSubId": "402880e86016d1b5016016db9b290001",
+          "mallCategoryId": "1",
+          "mallSubName": "苹果/梨",
+          "comments": null
+        },
+        {
+          "mallSubId": "402880e86016d1b5016016dbff2f0002",
+          "mallCategoryId": "1",
+          "mallSubName": "柑橘橙柚",
+          "comments": null
+        }
+      ],
+      "comments": null,
+      "image": "http://images.baixingliangfan.cn/firstCategoryPicture/20180408/20180408111959_2837.png"
+    },
+    {
+      "mallCategoryId": "2",
+      "mallCategoryName": "中外名酒",
+      "bxMallSubDto": [
+        {
+          "mallSubId": "2c9f6c9460337d540160337fefd60000",
+          "mallCategoryId": "2",
+          "mallSubName": "白酒",
+          "comments": ""
+        },
+        {
+          "mallSubId": "402880e86016d1b5016016e083f10010",
+          "mallCategoryId": "2",
+          "mallSubName": "啤酒",
+          "comments": ""
+        },
+        {
+          "mallSubId": "402880e86016d1b5016016df1f92000c",
+          "mallCategoryId": "2",
+          "mallSubName": "葡萄酒",
+          "comments": ""
+        },
+        {
+          "mallSubId": "2c9f6c94621970a801626a40feac0178",
+          "mallCategoryId": "2",
+          "mallSubName": "洋酒",
+          "comments": null
+        },
+        {
+          "mallSubId": "2c9f6c94621970a801626a412c240179",
+          "mallCategoryId": "2",
+          "mallSubName": "海外直采",
+          "comments": null
+        }
+      ],
+      "comments": null,
+      "image": "http://images.baixingliangfan.cn/firstCategoryPicture/20180408/20180408112010_4489.png"
+    },
+    {
+      "mallCategoryId": "3",
+      "mallCategoryName": "营养奶品",
+      "bxMallSubDto": [
+        {
+          "mallSubId": "402880e86016d1b5016016e135440011",
+          "mallCategoryId": "3",
+          "mallSubName": "鲜奶",
+          "comments": ""
+        },
+        {
+          "mallSubId": "402880e86016d1b5016016e171cc0012",
+          "mallCategoryId": "3",
+          "mallSubName": "酸奶",
+          "comments": ""
+        },
+        {
+          "mallSubId": "402880e86016d1b5016016e240e60013",
+          "mallCategoryId": "3",
+          "mallSubName": "乳酸菌",
+          "comments": ""
+        },
+        {
+          "mallSubId": "2c9f6c9460a03c0c0160a041ab1d0000",
+          "mallCategoryId": "3",
+          "mallSubName": "奶油奶酪",
+          "comments": null
+        }
+      ],
+      "comments": null,
+      "image": "http://images.baixingliangfan.cn/firstCategoryPicture/20180408/20180408113102_1595.png"
+    },
+    {
+      "mallCategoryId": "5",
+      "mallCategoryName": "食品饮料",
+      "bxMallSubDto": [
+        {
+          "mallSubId": "2c9f6c94609a62be0160a02d1dc20021",
+          "mallCategoryId": "5",
+          "mallSubName": "饼干糕点",
+          "comments": ""
+        },
+        {
+          "mallSubId": "402880e86016d1b5016016e4dca2001e",
+          "mallCategoryId": "5",
+          "mallSubName": "休闲小食",
+          "comments": ""
+        },
+        {
+          "mallSubId": "402880e86016d1b5016016e51380001f",
+          "mallCategoryId": "5",
+          "mallSubName": "糖果巧克力",
+          "comments": ""
+        },
+        {
+          "mallSubId": "2c9f6c94609a62be0160a02de70e0022",
+          "mallCategoryId": "5",
+          "mallSubName": "冲调饮品",
+          "comments": ""
+        },
+        {
+          "mallSubId": "2c9f6c94626a435f01626a4a7f590000",
+          "mallCategoryId": "5",
+          "mallSubName": "进口食品",
+          "comments": ""
+        },
+        {
+          "mallSubId": "402880e86016d1b5016016e4ac16001d",
+          "mallCategoryId": "5",
+          "mallSubName": "坚果炒货",
+          "comments": null
+        },
+        {
+          "mallSubId": "402880e86016d1b5016016e549710020",
+          "mallCategoryId": "5",
+          "mallSubName": "饮用水",
+          "comments": ""
+        },
+        {
+          "mallSubId": "402880e86016d1b5016016e656c50022",
+          "mallCategoryId": "5",
+          "mallSubName": "果蔬汁",
+          "comments": null
+        },
+        {
+          "mallSubId": "2c9f6c946016f86f01601709335d0000",
+          "mallCategoryId": "5",
+          "mallSubName": "乳制饮料",
+          "comments": null
+        },
+        {
+          "mallSubId": "2c9f6c946077476a0160781eb392000d",
+          "mallCategoryId": "5",
+          "mallSubName": "咖啡茶饮",
+          "comments": null
+        },
+        {
+          "mallSubId": "402880e86016d1b5016016e62bbd0021",
+          "mallCategoryId": "5",
+          "mallSubName": "碳酸饮料",
+          "comments": null
+        },
+        {
+          "mallSubId": "2c9f6c946077476a0160781f6d8c000e",
+          "mallCategoryId": "5",
+          "mallSubName": "功能饮料",
+          "comments": null
+        }
+      ],
+      "comments": null,
+      "image": "http://images.baixingliangfan.cn/firstCategoryPicture/20180408/20180408113048_1276.png"
+    },
+    {
+      "mallCategoryId": "4",
+      "mallCategoryName": "个人护理",
+      "bxMallSubDto": [
+        {
+          "mallSubId": "2c9f6c94621970a801626a35cb4d0175",
+          "mallCategoryId": "4",
+          "mallSubName": "进口护理",
+          "comments": null
+        },
+        {
+          "mallSubId": "2c9f6c94621970a801626a363e5a0176",
+          "mallCategoryId": "4",
+          "mallSubName": "口腔护理",
+          "comments": null
+        },
+        {
+          "mallSubId": "2c9f6c94621970a801626a3770620177",
+          "mallCategoryId": "4",
+          "mallSubName": "特殊用纸",
+          "comments": null
+        }
+      ],
+      "comments": null,
+      "image": "http://images.baixingliangfan.cn/firstCategoryPicture/20180408/20180408112053_8191.png"
+    }
+  ],
+  "slides": [
+    {
+      "image": "http://images.baixingliangfan.cn/advertesPicture/20180407/20180407175040_1780.jpg",
+      "goodsId": "b1195296679f482aa7d54d95ac2b4a94"
+    },
+    {
+      "image": "http://images.baixingliangfan.cn/advertesPicture/20180407/20180407175111_9509.jpg",
+      "goodsId": "da34d6f381464a219b37a9ac0ad579e8"
+    },
+    {
+      "image": "http://images.baixingliangfan.cn/advertesPicture/20180407/20180407175142_6947.jpg",
+      "goodsId": "ad176e397858448a854dc50371334faf"
+    }
+  ]
+}
