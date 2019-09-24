@@ -42,7 +42,7 @@ show collections
 db
 ```
 
-# 数据库的增删改查
+# 数据库的增删改查(命令行)
   - MongoDB的存储结构: 库 -> 集合 -> 文件
   - 向user集合插入 ({"name": "lzhhc"})
 ```
@@ -63,10 +63,22 @@ db.user.findOne()
 ```
 db.user.update({"name":"lzhhc"},{"name":"lzhhc","age":"18"})
 ```
+  - 文件的属性更新
+  - 将上面的元素,年龄改为19
+  - 使用 $set
+```
+db.user.update({"name":"lzhhc"},{"$set":{age:19}})
+```
   - 文件的删除
   - 删除{"name":"lzhhhh1"}
 ```
 db.user.remove({"name":"lzhhhh1"})
+```
+  - 文件中某个属性的删除
+  - 如删除 age属性
+  - 使用 $unset
+```
+db.user.update({"name":"lzhhc"},{"$unset":{age:''}})
 ```
   - 集合的删除
   - 删除 user 集合
@@ -78,6 +90,52 @@ db.user.drop()
 ```
 db.dropDatabase()
 ```
+  - 批量插入(效率高:1000条数据80ms, 循环插入10000条:2785ms)
+  - 往 log 集合中插入
+```
+db.log.insert([
+  {"id":1},
+  {"id":2},
+  {"id":3}
+])
+```
+  - 将集合中某个文件的年龄-2
+  - $inc
+```
+db.user.update({"name":'lzhhhh1'},{"$inc":{age:-2}})
+```
+  - 给集合中所有文件添加一个新属性:interest
+  - $set + multi
+```
+db.user.update({},{"$set":{"interest":[]}},{multi: true})
+```
+  - 将小王的年龄改为20
+  - 如果存在,则修改, 若不存在,则新增
+  - upsert
+```
+db.user.update({"name":"Mr Wang"},{"$set":{"age":20}},{upsert:true})
+```
+
+# 使用 mongo 命令启动 js 脚本
+  - 使用 log 库
+  - 等价于 shell 使用 use log
+```
+const db = connect('log');
+```
+  - 往login集合中写入数据
+  - 写入以下代码
+  - 使用 mongo 01、mongo-goTask.js 启动
+```
+const name = 'lzhhc';
+const time = Date.parse(new Date());
+const jsonDatabase = {"name":name,"time":time};
+const db = connect("log");
+
+db.login.insert(jsonDatabase);
+print('[demo]':log print success');
+```
+
+
 
 
 
