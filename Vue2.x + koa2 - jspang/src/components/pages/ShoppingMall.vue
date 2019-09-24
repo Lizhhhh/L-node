@@ -60,6 +60,19 @@ export default {
     }
   },
   created() {
+    // 测试用例
+    axios
+      ({
+        url: 'https://www.easy-mock.com/mock/5d89f50298fe8f6134b63b54/smileVue/index',
+        method: 'get'
+      })
+      .then(response => {
+        console.log(response)
+      })
+      .catch(error => {
+        console.log(error);
+      })
+
     // 请求category
     axios
       ({
