@@ -41,37 +41,61 @@
         商品推荐
       </div>
       <div class="recommend-body">
-        <img src="">
+        <swiper :options="swiperOption">
+          <swiper-slide v-for="(item,index) in recommendGoods" :key="index">
+            <div class="recommend-item">
+              <img :src="item.image" width="80%">
+              <div>{{item.goodsName}}</div>
+              <div>￥{{item.price}}(￥{{item.mallPrice}})</div>
+            </div>
+          </swiper-slide>
+        </swiper>
       </div>
     </div>
+
+    <!-- swiper 体验 -->
+    <swiperDefault2></swiperDefault2>
   </div>
 </template>
 
 <script>
 import axios from 'axios'
+import 'swiper/dist/css/swiper.css'
+import { swiper, swiperSlide } from 'vue-awesome-swiper'
+import swiperDefault2 from '../swiper/swiperDefault2.vue'
 export default {
   data() {
     return {
+      swiperOption: {
+        slidesPerView: 3
+      },
       locationIcon: require('../../assets/images/location.png'),
       bannerPicArray: [
       ],
       category: [],
-      adBanner: ''
+      adBanner: '',
+      recommendGoods: []
     }
   },
   created() {
     // 测试用例
-    axios
-      ({
-        url: 'https://www.easy-mock.com/mock/5d89f50298fe8f6134b63b54/smileVue/index',
-        method: 'get'
-      })
-      .then(response => {
-        console.log(response)
-      })
-      .catch(error => {
-        console.log(error);
-      })
+    // axios
+    //   ({
+    //     url: 'https://www.easy-mock.com/mock/5d89f50298fe8f6134b63b54/smileVue/index',
+    //     method: 'get'
+    //   })
+    //   .then(response => {
+    //     console.log(response);
+    //     if (response.status === 200) {
+    //       this.category = response.data.data.category;
+    //       this.adBanner = response.data.data.advertesPicture.PICTURE_ADDRESS;
+    //       this.bannerPicArray = response.data.data.slides;
+    //       this.recommendGoods = response.data.data.recommend;
+    //     }
+    //   })
+    //   .catch(error => {
+    //     console.log(error);
+    //   })
 
     // 请求category
     axios
@@ -112,6 +136,23 @@ export default {
       .catch(error => {
         console.log(error)
       })
+    // 请求商品推荐图
+    axios
+      ({
+        url: 'http://localhost:3000/recommend',
+        method: 'get'
+      })
+      .then(response => {
+        this.recommendGoods = response.data;
+      })
+      .catch(error => {
+        console.log(error)
+      })
+  },
+  components: {
+    swiper,
+    swiperSlide,
+    swiperDefault2
   }
 }
 </script>
@@ -174,6 +215,17 @@ export default {
   display: flex;
   justify-content: flex-start;
   font-size: 14px;
+}
+.recommend-body {
+  border-bottom: 1px solid #eee;
+  height: 148px;
+}
+.recommend-item {
+  width: 99%;
+  border-right: 1px solid #eee;
+  height: 100%;
+  text-align: center;
+  font-size: 12px;
 }
 </style>
 

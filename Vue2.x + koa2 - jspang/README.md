@@ -273,3 +273,113 @@ Vue
     font-size: 14px;
   }
   ```
+
+# 滑动组件:vue-awesome-swiper
+  - https://github.com/surmon-china/vue-awesome-swiper
+  - 轮播循环
+  - 安装
+```
+npm install vue-awesome-swiper --save
+```
+  - 导入(在需要的页面)
+  - /src/components/pages/ShoppingMall.vue
+```
+import 'swiper/dist/css/swiper.css'
+import {swiper, swiperSlide} from 'vue-awesome-swiper'
+```
+  - 挂载到Vue
+```
+export default{
+  data(){
+    ...
+  },
+  components:{
+    swiper,
+    swiperSlide
+  }
+}
+```
+  - 使用
+  - 滑动组件的选项 :options
+```
+<swiper-slide :options="swiperOption">
+    <swiper-slide v-for="(item, index) in recommendGoods" :key="index">
+        <div class="recommend-item">
+            <img :src="item.image" width="80%">
+            <div>{{item.goodsName}}</div>
+            <div>￥{{item.price}}(商城￥{{item.mallPrice}})</div>
+        </div>
+    </swiper-slide>
+</swiper>
+<script>
+export default{
+  data(){
+    return {
+      swiperOption:{
+        slidesPerView:3    // 每一个页面展示3项!
+      }
+    }
+  }
+}
+</script>
+```
+
+# 快速生成Swiper组件
+  - 熟悉体验vue-awesome-swiper组件
+  - 项目源代码 /src/components/swiper/swiperDefault.vue
+  - 1.快速生成一个vue模板(Vue2 Snippets)
+```
+vbs + tab
+```
+  - 2.局部(部分)导入
+  - /src/components/swiper/swiperDefault.vue
+```
+<script>
+import 'swiper/dist/css/swiper.css'
+import {swiper, swiperSlide} from 'vue-awesome-swiper'
+export default{
+  data(){
+    return {
+      ...
+    }
+  },
+  components:{
+    swiper,
+    swiperSlide
+  }
+}
+</script>
+```
+  - 3.使用
+```
+<template>
+    <div>
+        <swiper>
+            <swiper-slide v-for="(item,index) in slide" :key="index">
+                Slide {{item}}
+            </swiper-slide>
+        </swiper>
+    </div>
+</template>
+```
+  - 4.作为其他页面的子组件使用
+  - /src/components/pages/ShoppongMall.vue
+```
+<script>
+import swiperDefault from '../swiper/swiperDefault.vue'
+export default{
+  data(){
+    return{
+      ...
+    }
+  },
+  components:{
+    swiperDefault
+  }
+}
+</script>
+```
+  - 使用
+```
+<swiper-default></swiper-default>
+```
