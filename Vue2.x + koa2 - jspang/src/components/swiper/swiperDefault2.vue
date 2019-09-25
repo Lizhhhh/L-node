@@ -17,8 +17,10 @@ export default {
     return {
       slide: [1, 2, 3, 4, 5, 6],
       swiperOption: {
+        loop: true,
         pagination: {
-          el: '.swiper-pagination'
+          el: '.swiper-pagination',
+          clickable: true
         }
       }
     }
@@ -35,6 +37,6 @@ export default {
   height: 4rem;
   text-align: center;
   padding-top: 3rem;
-  background-color: #c0c0c0;
+  border-bottom: 1px solid #c0c0c0;
 }
 </style>

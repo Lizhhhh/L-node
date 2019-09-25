@@ -274,8 +274,8 @@ Vue
   }
   ```
 
-# 滑动组件:vue-awesome-swiper
-  - https://github.com/surmon-china/vue-awesome-swiper
+# swiper的使用(详细版)
+  - github: https://github.com/surmon-china/vue-awesome-swiper
   - 轮播循环
   - 安装
 ```
@@ -382,4 +382,177 @@ export default{
   - 使用
 ```
 <swiper-default></swiper-default>
+```
+
+# swiper 的导入(简版)
+  - header
+```
+import {swiper, swiperSlide} from 'vue-awesome-swiper'
+import 'swiper/dist/css/swiper.css'
+```
+  - swiperOption
+  - 在data中
+```
+swiperOption:{
+  pagination:{
+    el:'.class'
+  }
+}
+```
+  - components
+```
+components:{
+  swiper,
+  swiperSlide
+}
+```
+  - template
+```
+<swiper class="" :options="swiperOption">
+  <swiper-slide class="" v-for="(item,index) in slides" :key="index">
+    Slide {{item}}
+  <swiper-slide>
+  <div class="swiper-pagination" slot="pagination"></div>
+</swiper>
+```
+
+# swiper 组件的带分页器
+  - 导入如上
+  - 注意:
+  - :options="swiperOption"
+```
+<swiper :options="swiperOption">
+    <swiper-slide class="swiper-slide" v-for="(item, index) in slide" :key="index">
+        Slide{{item}}
+    </swiper>
+    <div class="swiper-pagination" slot="pagination">
+</swiper-slide>
+
+<script>
+export default{
+  data(){
+    return{
+      swiperOption{
+        pagination:{
+          el:'.swiper-pagination'
+        }
+      }
+    }
+  }
+}
+</script>
+```
+  - 可点击的分页器
+  - clickable
+```
+<script>
+export default{
+  data(){
+    return{
+      swiperOption{
+        pagination:{
+          el:'.swiper-pagination',
+          clickable:true
+        }
+      }
+    }
+  }
+}
+</script>
+```
+  - 循环滚动
+  - loop:true
+```
+<script>
+export default{
+  data(){
+    return{
+      swiperOption{
+        loop:true
+        pagination:{
+          el:'.swiper-pagination',
+          clickable:true
+        }
+      }
+    }
+  }
+}
+</script>
+```
+
+# swiper 组件带分页器的垂直显示
+  - direction: 'vertical'
+  - 源代码 /src/components/swiper/swiperDefault3.vue
+```
+<swiper class="swiper" :options="swiperOption">
+  <swiper-slide class="swiper-slide" v-for="(item,index) in slide" :key="index">
+    Slide {{item}}
+  </swiper-slide>
+  <div class="swiper-pagination" slot="pagination"></div>
+</swiper>
+
+<script>
+export default{
+  data(){
+    return {
+      swiperOption{
+        direction:'vertical',
+        pagination:{
+          el:'.swiper-pagination'
+        }
+      }
+    }
+  }
+}
+</script>
+
+<style scoped>
+.swiper{
+  height:7rem;
+  border-top: 1px solid red;
+  border-bottom: 1px solid red;
+}
+.swiper-slide{
+  height:6rem;
+  text-align:center;
+  line-height: 6rem;
+}
+</style>
+```
+  - 让字体在垂直方向居中
+```
+.class{
+  height:6rem;
+  line-height:6rem;
+}
+```
+
+# swiper 区域滚动效果
+  - 源代码 src/components/swiper/swiperText.vue
+  - swiperOption
+```
+swiperOption:{
+  direction: 'vertical',  // 竖直方向
+  slidesPerView: 'auto',  // 每页显示的数量
+  freeMode: true,      // 无间隔滑动(否则按item一项一项的滑动)
+  mousewheel: true     // 打开鼠标滚轮效果
+}
+```
+ - 限制swiper的高度(一般竖直都规定高度)
+```
+.swiper{
+  height: 18.75rem;
+  overflow: hidden;
+}
+```
+ - 长篇文字(垂直方向)居中显示样式问题解决方案(盒布局)
+```
+.text{
+  font-size: 14px;
+  text-align: left;
+  padding: 30px;
+  height: auto;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
 ```

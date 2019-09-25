@@ -54,7 +54,14 @@
     </div>
 
     <!-- swiper 体验 -->
-    <swiperDefault2></swiperDefault2>
+    <!-- <swiperDefault></swiperDefault> -->
+    <!-- swiper 带分页器 -->
+    <!-- <swiperDefault2></swiperDefault2> -->
+    <!-- swiper 竖直滑动 -->
+    <!-- <swiperDefault3></swiperDefault3> -->
+    <!-- swiper 区域滚动效果 -->
+    <!-- <swiperText></swiperText> -->
+
   </div>
 </template>
 
@@ -62,7 +69,10 @@
 import axios from 'axios'
 import 'swiper/dist/css/swiper.css'
 import { swiper, swiperSlide } from 'vue-awesome-swiper'
+import swiperDefault from '../swiper/swiperDefault.vue'
 import swiperDefault2 from '../swiper/swiperDefault2.vue'
+import swiperDefault3 from '../swiper/swiperDefault3.vue'
+import swiperText from '../swiper/swiperText.vue'
 export default {
   data() {
     return {
@@ -152,7 +162,10 @@ export default {
   components: {
     swiper,
     swiperSlide,
-    swiperDefault2
+    swiperDefault,
+    swiperDefault2,
+    swiperDefault3,
+    swiperText
   }
 }
 </script>
