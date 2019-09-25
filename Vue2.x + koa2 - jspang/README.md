@@ -467,8 +467,8 @@ export default{
 export default{
   data(){
     return{
-      swiperOption{
-        loop:true
+      swiperOption:{
+        loop:true,
         pagination:{
           el:'.swiper-pagination',
           clickable:true
@@ -554,5 +554,28 @@ swiperOption:{
   height: auto;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
+}
+```
+
+
+
+# flex 布局
+  - 让多个div框呈1行排列
+```
+.floor-regular{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+```
+
+# 盒布局
+  - 限制div的宽度
+```
+.floor-regular div{
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  width: 10rem;
+  border-bottom: 1px solid #ddd;
 }
 ```

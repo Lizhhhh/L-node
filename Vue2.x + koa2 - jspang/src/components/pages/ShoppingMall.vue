@@ -53,6 +53,30 @@
       </div>
     </div>
 
+    <!-- 楼层区域 -->
+    <div class="floor">
+      <!-- 不规则区域 -->
+      <div class="floor-irregular">
+        <div class="floor-one">
+          <img :src="floor1_0.image" width="100%" />
+        </div>
+        <div>
+          <div class="floor-two">
+            <img :src="floor1_1.image" width="100%" />
+          </div>
+          <div>
+            <img :src="floor1_2.image" width="100%" />
+          </div>
+        </div>
+      </div>
+      <!-- 规则区域 -->
+      <div class="floor-regular">
+        <div v-for="(item, index) in floor1.slice(3)" :key="index">
+          <img v-lazy="item.image" width="100%" />
+        </div>
+      </div>
+    </div>
+
     <!-- swiper 体验 -->
     <!-- <swiperDefault></swiperDefault> -->
     <!-- swiper 带分页器 -->
@@ -77,6 +101,7 @@ export default {
   data() {
     return {
       swiperOption: {
+        loop: true,
         slidesPerView: 3
       },
       locationIcon: require('../../assets/images/location.png'),
@@ -84,7 +109,11 @@ export default {
       ],
       category: [],
       adBanner: '',
-      recommendGoods: []
+      recommendGoods: [],
+      floor1: [],
+      floor1_0: {},
+      floor1_1: {},
+      floor1_2: {}
     }
   },
   created() {
@@ -101,6 +130,10 @@ export default {
     //       this.adBanner = response.data.data.advertesPicture.PICTURE_ADDRESS;
     //       this.bannerPicArray = response.data.data.slides;
     //       this.recommendGoods = response.data.data.recommend;
+    //       this.floor1 = response.data.data.floor1;
+    //       this.floor1_0 = this.floor1[0];
+    //       this.floor1_1 = this.floor1[1];
+    //       this.floor1_2 = this.floor1[2];
     //     }
     //   })
     //   .catch(error => {
@@ -158,6 +191,28 @@ export default {
       .catch(error => {
         console.log(error)
       })
+
+    // 获取楼层数据
+    axios
+      ({
+        url: 'http://localhost:3000/floor1',
+        method: 'get'
+      })
+      .then(response => {
+        this.floor1 = response.data;
+        this.floor1_0 = this.floor1[0];
+        this.floor1_1 = this.floor1[1];
+        this.floor1_2 = this.floor1[2];
+      })
+      .catch(error => {
+        console.log(error);
+      })
+
+
+
+    //
+
+
   },
   components: {
     swiper,
@@ -239,6 +294,37 @@ export default {
   height: 100%;
   text-align: center;
   font-size: 12px;
+}
+.floor-irregular {
+  display: flex;
+  flex-direction: row;
+  background-color: #fff;
+  border-bottom: 1px solid #ddd;
+}
+.floor-irregular div {
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  width: 10rem;
+}
+.floor-one {
+  border-right: 1px solid #ddd;
+}
+.floor-two {
+  border-bottom: 1px solid #ddd;
+}
+.floor-regular {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+.floor-regular div {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  width: 10rem;
+  border-bottom: 1px solid #ddd;
+}
+.floor-regular div:nth-child(odd) {
+  border-right: 1px solid #ddd;
 }
 </style>
 
