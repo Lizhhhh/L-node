@@ -1,7 +1,7 @@
 # L-node
   + node资料归类
 
-# 细节点入相应的文件查看 README.md
+# 学习笔记
   + Egg+Vue+Docker (未完待续...)
   + Koa + Node.js: 笔记在博客 https://blog.csdn.net/piano9425/  (欢迎关注)
   + koa2-jspang 完整笔记: https://github.com/Lizhhhh/L-node/tree/master/koa2%20-%20jspang
@@ -11,8 +11,8 @@
 
 
 # koa2-jspang:
-  + http://www.jspang.com/posts/2017/11/13/koa2.html
+  +传送门: http://www.jspang.com/posts/2017/11/13/koa2.html
 
 # MongoDB - jspang:
-  + http://www.jspang.com/posts/2017/12/16/mongodb.html
+  +传送门 http://www.jspang.com/posts/2017/12/16/mongodb.html
 
