@@ -579,3 +579,69 @@ swiperOption:{
   border-bottom: 1px solid #ddd;
 }
 ```
+
+# 从父组件向子组件传数据
+  - 以floorComponent为例
+  - 首先在父组件中写好样式和数据
+  - 新建一个.vue文件,将要封装的代码复制到 floorComponent.vue
+  - 挂载与使用
+  - 父组件 ShoppingMall.vue
+```
+import floorComponent from '../component/floorComponent.vue'
+components:{
+  floorComponent
+}
+```
+  - 数据传递
+  - 父组件中右floor1
+  - 子组件中右floorData
+  - 子组件使用props:['fromFloor1']接受父组件的数据
+```
+// 父组件<template>
+<floor-component :fromFloor1="floor1"></floor-component>
+
+// 子组件
+props:['fromFloor1'],
+data(){
+  return {
+    floorData0:{},
+    floorData1:{},
+    floorData2:{}
+  }
+},
+created(){
+  this.floorData0 = this.fromFloor1[0];
+  this.floorData1 = this.fromFloor1[1];
+  this.floorData2 = this.fromFloor1[2];
+}
+```
+
+# 全局过滤器
+  - src目录下新建filter文件夹(用于存放过滤器的函数)
+  - 编写filter方法toMoney并导出
+```
+export function toMoney(money = 0){
+  return money.toFixed(2);
+}
+```
+  - 在需要使用到的页面如 /src/pages/ShoppingMall/vue 中导入并挂载
+```
+import { toMoney } from '@/filter/moneyFilter.js'
+
+export default{
+  data(){
+    return {
+      ...
+    }
+  },
+  filters:{
+    moneyFilter(money){
+      return toMoney(money);
+    }
+  }
+}
+```
+  - 在需要的位置使用
+```
+<div>￥{{ item.price | moneyFilter }} (￥{{ item.mallPrice | moneyFilter }})</div>
+```

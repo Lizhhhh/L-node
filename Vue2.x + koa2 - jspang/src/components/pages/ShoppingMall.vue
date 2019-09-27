@@ -46,46 +46,31 @@
             <div class="recommend-item">
               <img :src="item.image" width="80%">
               <div>{{item.goodsName}}</div>
-              <div>￥{{item.price}}(￥{{item.mallPrice}})</div>
+              <div>￥{{item.price | moneyFilter }}(￥{{item.mallPrice | moneyFilter }})</div>
             </div>
           </swiper-slide>
         </swiper>
       </div>
     </div>
 
-    <!-- 楼层区域 -->
-    <div class="floor">
-      <!-- 不规则区域 -->
-      <div class="floor-irregular">
-        <div class="floor-one">
-          <img :src="floor1_0.image" width="100%" />
-        </div>
-        <div>
-          <div class="floor-two">
-            <img :src="floor1_1.image" width="100%" />
-          </div>
-          <div>
-            <img :src="floor1_2.image" width="100%" />
-          </div>
-        </div>
-      </div>
-      <!-- 规则区域 -->
-      <div class="floor-regular">
-        <div v-for="(item, index) in floor1.slice(3)" :key="index">
-          <img v-lazy="item.image" width="100%" />
-        </div>
+    <floor-component :floorData="floor1" :floorTitle="floorName.floor1"></floor-component>
+    <floor-component :floorData="floor2" :floorTitle="floorName.floor2"></floor-component>
+    <floor-component :floorData="floor3" :floorTitle="floorName.floor3"></floor-component>
+
+    <!-- Hot Area -->
+    <div class="hot-area">
+      <div class="hot-title">热卖商品</div>
+      <div class="hot-goods">
+        <!-- 这里需要一个list组件 -->
+        <van-list>
+          <van-row gutter="20">
+            <van-col span="12" v-for="(item, index) in hotGoods" :key="index">
+              <goods-info :goodsImage="item.image" :goodsName="item.name" :goodsPrice="item.price"></goods-info>
+            </van-col>
+          </van-row>
+        </van-list>
       </div>
     </div>
-
-    <!-- swiper 体验 -->
-    <!-- <swiperDefault></swiperDefault> -->
-    <!-- swiper 带分页器 -->
-    <!-- <swiperDefault2></swiperDefault2> -->
-    <!-- swiper 竖直滑动 -->
-    <!-- <swiperDefault3></swiperDefault3> -->
-    <!-- swiper 区域滚动效果 -->
-    <!-- <swiperText></swiperText> -->
-
   </div>
 </template>
 
@@ -93,10 +78,10 @@
 import axios from 'axios'
 import 'swiper/dist/css/swiper.css'
 import { swiper, swiperSlide } from 'vue-awesome-swiper'
-import swiperDefault from '../swiper/swiperDefault.vue'
-import swiperDefault2 from '../swiper/swiperDefault2.vue'
-import swiperDefault3 from '../swiper/swiperDefault3.vue'
-import swiperText from '../swiper/swiperText.vue'
+import floorComponent from '../component/floorComponent.vue'
+import { toMoney } from '@/filter/moneyFilter.js'
+import goodsInfo from '@/components/component/goodsInfoComponent'
+import api from '@/serviceAPI.config.js'
 export default {
   data() {
     return {
@@ -111,29 +96,41 @@ export default {
       adBanner: '',
       recommendGoods: [],
       floor1: [],
-      floor1_0: {},
-      floor1_1: {},
-      floor1_2: {}
+      floor2: [],
+      floor3: [],
+      floorName: [],
+      hotGoods: []
+    }
+  },
+  components: {
+    swiper,
+    swiperSlide,
+    floorComponent,
+    goodsInfo
+  },
+  filters: {
+    moneyFilter(money) {
+      return toMoney(money);
     }
   },
   created() {
     // 测试用例
     // axios
     //   ({
-    //     url: 'https://www.easy-mock.com/mock/5d89f50298fe8f6134b63b54/smileVue/index',
+    //     url: api.getIndexInfo,
     //     method: 'get'
     //   })
     //   .then(response => {
-    //     console.log(response);
     //     if (response.status === 200) {
     //       this.category = response.data.data.category;
     //       this.adBanner = response.data.data.advertesPicture.PICTURE_ADDRESS;
     //       this.bannerPicArray = response.data.data.slides;
     //       this.recommendGoods = response.data.data.recommend;
     //       this.floor1 = response.data.data.floor1;
-    //       this.floor1_0 = this.floor1[0];
-    //       this.floor1_1 = this.floor1[1];
-    //       this.floor1_2 = this.floor1[2];
+    //       this.floor2 = response.data.data.floor2;
+    //       this.floor3 = response.data.data.floor3;
+    //       this.floorName = response.data.data.floorName;
+    //       this.hotGoods = response.data.data.hotGoods;
     //     }
     //   })
     //   .catch(error => {
@@ -143,7 +140,7 @@ export default {
     // 请求category
     axios
       ({
-        url: 'http://localhost:3000/category',
+        url: api.getCategoryInfo,
         method: 'get'
       })
       .then(response => {
@@ -158,7 +155,7 @@ export default {
     // 请求广告条
     axios
       ({
-        url: 'http://localhost:3000/advertesPicture',
+        url: api.getadvertesPictureInfo,
         method: 'get'
       })
       .then(response => {
@@ -170,7 +167,7 @@ export default {
     // 请求轮播图
     axios
       ({
-        url: 'http://localhost:3000/slides',
+        url: api.getslidesInfo,
         method: 'get'
       })
       .then(response => {
@@ -182,7 +179,7 @@ export default {
     // 请求商品推荐图
     axios
       ({
-        url: 'http://localhost:3000/recommend',
+        url: api.getrecommendInfo,
         method: 'get'
       })
       .then(response => {
@@ -192,36 +189,73 @@ export default {
         console.log(error)
       })
 
-    // 获取楼层数据
+    // 获取楼层1数据
     axios
       ({
-        url: 'http://localhost:3000/floor1',
+        url: api.getfloor1Info,
         method: 'get'
       })
       .then(response => {
         this.floor1 = response.data;
-        this.floor1_0 = this.floor1[0];
-        this.floor1_1 = this.floor1[1];
-        this.floor1_2 = this.floor1[2];
+      })
+      .catch(error => {
+        console.log(error);
+      })
+    // 获取楼层2数据
+    axios
+      ({
+        url: api.getfloor2Info,
+        method: 'get'
+      })
+      .then(response => {
+        this.floor2 = response.data;
+      })
+      .catch(error => {
+        console.log(error);
+      })
+    // 获取楼层3数据
+    axios
+      ({
+        url: api.getfloor3Info,
+        method: 'get'
+      })
+      .then(response => {
+        this.floor3 = response.data;
+      })
+      .catch(error => {
+        console.log(error);
+      })
+
+    // 获取楼层名称
+    axios
+      ({
+        url: api.getfloorNameInfo,
+        method: 'get'
+      })
+      .then(response => {
+        this.floorName = response.data;
+        console.log(this.floorName)
+      })
+      .catch(error => {
+        console.log(error);
+      })
+
+    // 获取热卖商品
+    axios
+      ({
+        url: api.gethotGoodsInfo,
+        method: 'get'
+      })
+      .then(response => {
+        this.hotGoods = response.data
       })
       .catch(error => {
         console.log(error);
       })
 
 
-
-    //
-
-
-  },
-  components: {
-    swiper,
-    swiperSlide,
-    swiperDefault,
-    swiperDefault2,
-    swiperDefault3,
-    swiperText
   }
+
 }
 </script>
 
@@ -295,36 +329,13 @@ export default {
   text-align: center;
   font-size: 12px;
 }
-.floor-irregular {
-  display: flex;
-  flex-direction: row;
-  background-color: #fff;
-  border-bottom: 1px solid #ddd;
-}
-.floor-irregular div {
-  box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-  width: 10rem;
-}
-.floor-one {
-  border-right: 1px solid #ddd;
-}
-.floor-two {
-  border-bottom: 1px solid #ddd;
-}
-.floor-regular {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-}
-.floor-regular div {
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
-  width: 10rem;
-  border-bottom: 1px solid #ddd;
-}
-.floor-regular div:nth-child(odd) {
-  border-right: 1px solid #ddd;
+
+/* 热卖商品 */
+.hot-area {
+  text-align: center;
+  font-size: 14px;
+  height: 1.8rem;
+  line-height: 1.8rem;
 }
 </style>
 
