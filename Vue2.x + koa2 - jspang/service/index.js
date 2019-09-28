@@ -8,7 +8,7 @@ const mongoose = require('mongoose');
     initSchemas();
     const User = mongoose.model('User');
     let oneUser = new User({
-        userName: 'lzhhc1',
+        userName: 'lzhhc2',
         password: '123456'
     })
     oneUser.save().then(() => {

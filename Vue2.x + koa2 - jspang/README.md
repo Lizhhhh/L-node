@@ -799,6 +799,35 @@ let user = await User.findOne({}).exec();
 console.log(user);
 ```
 
-#
+# 密码的处理
+  - 加密处理
+  - 在线调试: http://www.atool9.com/hash.php
+  - bcrypt: 加密工具
+  - 安装 && 使用
+```
+npm install --save bcrypt
+
+const bcrypt = require('bcrypt');
+const SALT_WORK_FACTOR = 10;
+
+const UserSchema = new Schema({
+  UserId: {type: ObjectId},
+  password: String
+})
+
+UserSchema.pre('save',(next)=>{
+  bcrypt.genSalt(SALT_WORK_FACTOR,(err, salt) =>{
+    if(err) return next(err);
+    bcrypt.hash(this.password, salt, (err, hash) =>{
+      if(err) return next(err);
+      this.password = hash;
+      next();
+    })
+  })
+})
+```
+  - UserSchema.pre:每次在保存数据时,先进行的函数
+  - bcrypt.genSalt: 加盐处理
+  - bcrypt.hash: 加密处理
 
 
