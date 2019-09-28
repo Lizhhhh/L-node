@@ -1,4 +1,5 @@
 const BASEURL = "http://localhost:3000/";
+const LOCALURL = 'http://localhost:3001/';
 const URL = {
     getIndexInfo: BASEURL + 'index',
     getCategoryInfo: BASEURL + 'getCategoryInfo',
@@ -10,6 +11,7 @@ const URL = {
     getfloor3Info: BASEURL + 'floor3',
     getfloorNameInfo: BASEURL + 'floorName',
     gethotGoodsInfo: BASEURL + 'hotGoods',
+    registerUser: LOCALURL + 'user/register'
 }
 
 module.exports = URL;

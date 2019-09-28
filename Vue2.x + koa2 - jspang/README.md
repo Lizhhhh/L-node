@@ -831,3 +831,291 @@ UserSchema.pre('save',(next)=>{
   - bcrypt.hash: 加密处理
 
 
+
+# 使用Koa-router进行路由管理
+  - npm install --save koa-router
+```
+const Router = require('koa-router');
+let router = new Router();
+router.get('/', async (ctx)=>{
+  ctx.body = '用户操作首页'
+})
+```
+
+
+# 路由模块化
+  - 在appApi下面创建需要模块化的文件
+  - 如:home.js、user.js
+```
+const Router = reuiqre('koa-router');
+let router = new Router();
+router.get('/home', async (ctx)=>{
+  ctx.body = 'home'
+})
+
+module.exports = router
+```
+  - 导入
+  - /service/index.js
+```
+const Koa = require('koa');
+const app = new Koa()
+const Router = require('koa-router');
+let home = require('./appApi/.home.js');
+let router = new Router();
+router.use('/user', user.routes());
+
+app.use(router.routes());
+app.use(router.allowedMethods());
+```
+
+# 使用body-parser解析post请求
+  - 安装
+  - service/index.js
+```
+npm install --save koa-bodyparser
+```
+  - 导入
+```
+const Koa = require('koa');
+const app = new Koa();
+const bodyParser = require('koa-bodyparser');
+app.use(bodyParser)
+```
+  - 准备请求的url
+  - 全局配置
+  - src/serviceAPI.config.js
+```
+const LOCALURL ='http://localhost:3001/';
+const URL = {
+  registerUser = LOCALURL + 'user/register',
+}
+module.exports = URL;
+```
+  - 准备POST请求
+  - src/components/component/pages/Register.vue
+```
+import axios from 'axios'
+import url from '@serviceAPI.config.js'
+
+export default{
+  data(){
+    username:'',
+    password:''
+  },
+  methods:{
+    axiosRegisterUser(){
+      axios({
+        url: url.registerUser,
+        method: 'post',
+        data:{
+          username: this.username,
+          password: this.password
+        }
+      })
+      .then(response =>{
+        console.log(response);
+      })
+      .catch((error)=>{
+        console.log(error);
+      })
+    }
+  }
+}
+```
+  - 后端接受post请求中的参数
+  - service/user.js
+```
+const Router = require('koa-router');
+
+let router = new Router();
+router.post('./register', async(ctx)=>{
+  console.log(ctx.request.body);
+  ctx.body = ctx.request.body;
+})
+
+module.exports = router;
+```
+
+# 设置后台允许解决跨域(简单版)
+  - 中间件: koa2-cors
+```
+npm install --save koa2-cors
+```
+  - 引入:
+  - service/index.js
+```
+const Koa = require('koa');
+const app = new Koa();
+const cors = require('koa2-cors');
+
+app.use(cors())
+```
+
+# koa与数据库交互
+  - 首先在负责某个模块的路由中引入mongoose
+  - 安装mongoose:mongoDB在node中实现
+```
+npm install --save mongoose
+```
+  - 安装body-parser:解析Post请求
+```
+npm install --save body-parser
+```
+  - service/appApi/user.js
+```
+const Koa = require('koa');
+const app = new Koa();
+const Router = require('koa-router');
+const mongoose = require('mongoose');
+const bodyParser = require('koa-bodyparser');
+
+app.user(bodyParser())
+
+let router = new Router();
+router.post('/',async(ctx)=>{
+  const User = mongoose.model('User');
+  // 将获取的数据命名为newUser
+  let newUser = new User(ctx.request.body);
+
+  // 将newUsr存入数据库中
+  await newUser.save().then(()=>{
+    ctx.body = {
+      code:200,
+      message:'注册成功'
+    }
+  }).catch(error=>{
+    ctx.body={
+      code:500,
+      message:error
+    }
+  })
+})
+```
+  - 数据库的初始化
+```
+npm install glob --save
+
+const glob = require('glob');
+const initSchemas = () =>{
+  glob.sync(resolve(__dirname, './schema', '**/*.js')).forEach(require);
+}
+```
+  - 数据库的连接
+```
+const connect = ()=>{
+  mongoose.connect(db);
+  let maxConnectTimes = 0;
+
+  return new Promise((resolve, reject) =>{
+    mongoose.connection.on('disconnected', (err) =>{
+      if(maxConnectTimes < =3 ){
+        maxConnectTimes++;
+        mongoose.connect(db);
+        console.log(`正在第${maxConnectTimes}次连接数据库....`);
+      } else {
+        reject(err);
+        throw new Error('数据库出现问题,程序无法搞定,请认真....');
+      }
+    });
+
+    mongoose.connection.on('error', () =>{
+      console.log('[error] 数据库出错');
+      mongoose.connect(db);
+    })
+
+    mongoose.connection.once('open', () => {
+      console.log('[ok] MongoDB connected successfully');
+      resolve();
+    })
+  })
+}
+```
+
+# 前端处理后台返回的数据
+  - 使用vant的Toast作为提示消息的函数
+  - Vant->Toast: https://youzan.github.io/vant/#/zh-CN/toast
+```
+import { Toast } from 'vant'
+```
+  - 状态码200:返回成功
+  - 假设axiosRegisterUser()是axios的Post方法请求数据库的数据
+```
+axiosRegisterUser(){
+  axios({
+    url:url.registerUser,
+    method:'POST',
+    data:{
+      username:this.username,
+      password:this.password
+    }
+  })
+  .then(response =>{
+    console.log(response);
+
+    if(response.data.code === 200){
+      Toast.success(response.data.message);
+    } else{
+      console.log(response);
+      Toast.fail('注册失败');
+    }
+  })
+  .catch((error) =>{
+    console.log(error);
+  })
+}
+```
+
+# 向数据库插入一条数据
+```
+const User = mongoose.model('User');
+let oneUser = new User({
+  userName: 'lzhhc',
+  password: '123456'
+})
+oneUser.save().then(() =>{
+  console.log('插入成功!');
+})
+```
+
+# 按钮的防重复点击事件
+  - :loading属性
+  - 当loading = true时:按钮会显示一个旋转的圆圈.此时的按钮是无法点击的
+  - 当loading = false时:按钮重新变为可点击的状态
+  - 可以通过使用一个变量来控制按钮的可点击性,当提交时,按钮不可点击,提交完毕后,按钮可以点击
+```
+<van-button :loading="openLoading">提交</van-button>
+
+data(){
+  return {
+    openLoading:false
+  },
+  methods:{
+    axiosRegisterUser(){
+      this.openLoading = true;
+      axios({
+        url: ...,
+        method:'post',
+        data:{
+          userName: this.username,
+          password: this.password
+        }
+      })
+      .then(response=>{
+        if(success){
+          // 跳到首页
+          this.$router.push('/')
+        } else{
+          Toast.fail('注册失败');
+          this.openLoading = false;
+        }
+      })
+    }
+  }
+}
+```
+
+#
+
+
+

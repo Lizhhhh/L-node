@@ -33,10 +33,8 @@ exports.connect = () => {
 
         mongoose.connection.once('open', () => {
             console.log('[ok] MongoDB connected successfully');
-
             resolve()
         })
-
     })
 
 
