@@ -645,3 +645,160 @@ export default{
 ```
 <div>￥{{ item.price | moneyFilter }} (￥{{ item.mallPrice | moneyFilter }})</div>
 ```
+
+# 使用mongoose连接MongoDB
+  - npm install --save mongoose
+  - 导入mongoose
+  - 暴露接口给index连接
+  - /service/database/init.js
+```
+const mongoose = require('mongoose');
+const db = 'mongodb://localhost/smile-db';
+
+exports.connect = () =>{
+  // 连接数据库
+  mongoose.connect(db);
+
+  // 断开执行函数
+  mongoose.connection.on('disconnected', () =>{
+    console.log('[disconnected] 数据库断开连接... ');
+    mongoose.connect(db);
+  })
+
+  mongoose.connection.on('error', ()=>{
+    console.log('[error] 数据库出错');
+    mongoose.connect(db);
+  })
+
+  mongoose.connection.once('open', () =>{
+    console.log('[ok] MongoDB connected successfully');
+  })
+}
+```
+  - /service/index.js读取接口,执行连接操作
+```
+const { connect } = require('./database/init.js');
+
+(async () => {
+  await connect()
+})()
+```
+
+# 设置数据库连接失败,断线重连的次数
+  - /service/init.js
+```
+exports.connect = () =>{
+  mongoose.conncet(db);
+
+  let maxConnectTimes = 0;
+
+  return new Promise((resolve,reject)=>{
+    mongoose.connection.on('disconnected',(err)=>{
+      if(maxConnectTimes <= 3){
+        maxConnectTimes++;
+        mongoose.connect(db);
+        console.log(`正在尝试第${maxConnectTimes}次连接...`);
+      } else{
+        reject(err);
+        throw new Error('数据库连接失败... 请检查 /database/init.js 代码');
+      }
+    })
+  })
+}
+```
+
+# mongoose的三个定义
+  - schema: 用来定义表的模板,实现和MongoDB数据库的映射.
+  - model: 具备表操作能力的一个集合,是mongoose的核心能力
+  - entity:类似记录,由Model创建的实体
+
+# 创建Schema
+  - String: 字符串类型
+  - Number: 数字类型
+  - Date: 日期类型
+  - Boolean: 布尔类型
+  - Buffer: NodeJs的 Buffer类型
+  - ObjectId: 主键,一种特殊的类型
+  - Mixed: 混合类型
+  - Array: 集合类型
+```
+// 主键(对外)
+let ObjectId = Schema.Types.ObjectId;
+
+// 创建UserSchema
+const UserSchema = new Schema({
+    UserId: { type: ObjectId },
+    userName: {
+        unique: true, // 不重复
+        type: String // 字符串类型
+    },
+    password: String,
+    createAt: {
+        type: Date,
+        default: Date.now()
+    },
+    lastLoginAt: {
+        type: Date,
+        default: Date.now()
+    }
+})
+```
+  - 发布模型
+  - 下面的User要和数据库表中的名字一样
+```
+mongoose.model('User', userSchema);
+```
+
+# Schema对数据的插入和查询
+  - 安装glob
+  - glob:允许你使用*等符号,来写一个glob规则
+  - /service
+```
+npm install --save glob
+```
+  - 导入glob
+```
+const glob = require('glob');
+```
+  - 使用glob对引入所有的 Schame
+  - 假设/service/database/schema下有以下Schema
+  - User.js
+  - Company.js
+  - ...
+```
+const glob = reqire('glob');
+const { resolve } = require('path');
+
+exports.initSchemas = () =>{
+  glob.async(resolve(__dirname, './schema', '**/*.js')).forEach(require);
+}
+```
+  - 首先要找到此时的数据库,
+  - 当在shell执行 node index.js时
+  - 与数据库有关的立即执行函数执行了2个方法
+  - initSchemas() 来自init. 它连接了 mongodb://localhost/smile-db
+    + 即smile-db数据库
+  - mongoose.model('User') 表示 连接到 User集合中.
+    + 通过Robo 3T 可以在users 集合中找到插入的数据
+  - 插入的数据:oneUser
+  - 如何插入:oneUser.save()
+```
+const User = mongoose.model('User');
+let oneUser = new User({
+  userName:'lzhhc',
+  password:'123456'
+})
+
+oneUser.save().then(()=>{console.log("插入成功")});
+```
+  - 下面是查询
+  - 查询一个: findOne
+  - /service/index.js
+```
+let user = await User.findOne({}).exec();
+console.log(user);
+```
+
+#
+
+
