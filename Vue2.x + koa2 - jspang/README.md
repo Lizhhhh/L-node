@@ -1115,7 +1115,280 @@ data(){
 }
 ```
 
+# 前端、后端联系知识梳理
+  - 以打开浏览器,访问login为栗
+  - 打开浏览器,访问localhost:8080/#/login
+  - src/router/index.js 会根据 /login 找到对应的Login(src/components/pages/Login.vue)组件, 然后渲染到浏览器
+  - 当输入用户名和密码,点击登录按钮后
+  - 根据Login组件中配置的axios请求向后端发送请求.
+  - 请求的url是: http://localhost:3001/login
+  - 后端监听该url的代码如下
+```
+const Router = require('koa-router');
+let router = new Router();
+
+router.post('/login', async(ctx)=>{
+  // 此处是逻辑实现代码
+})
+```
+  - 后端监听到该路由请求后,会用请求的参数和数据库进行比对.
+  - 使用mongoose连接数据库的代码如下
+```
+const mongoose = require('mongoose');
+const { resolve } = require('path');
+const db = 'mongodb://localhost/smile-vue'
+
+exports.connect = () =>{
+  mongoose.connect(db);
+  let maxConnectTimes = 0;
+
+  return new Promise((resolve, reject) =>{
+    mongoose.connection.on('disconnected', (err) =>{
+      // 断线重连,最大重连次数3次
+      if(maxConnectTimes <= 3){
+        maxConnectTImes++;
+        mongoose.connect(db);
+      } else{
+        reject(err);
+        throw new Error('[connect error] 数据库连接失败')
+      }
+    });
+
+    // 失败
+    mongoose.connection.in('error', () =>{
+      console.log('[error] 数据库出错');
+      mongoose.connect(db);
+    })
+
+    // 成功打开
+    mongoose.connection.once('open', () =>{
+      console.log('[ok] MongoDB connected successfully');
+      resovle();
+    })
+  })
+}
+```
+  - 导入各个集合规则
+  - 使用glob
+```
+const glob = require('glob');
+const { resolve } = require('path');
+
+export.initSchemas = () =>{
+  glob.sync(resolve(__dirname, './schema', '**/*.js')).forEach(require);
+}
+// 此时,会连接到数据库,并初始化各个表的规则.
+```
+  - 使用mongoose查找数据
+```
+const User = mongoose.model('User');
+
+User.findOne({ userName: username }).exec().then(async (result) =>{
+  console.log(result);
+})
+```
+  - koa返回数据给前端
+```
+ctx.body = {
+  code:200,
+  message:msg
+}
+```
+
+# 前端实现登录逻辑
+  - 假设账号,密码正确,后端会返回 { code:200, message:true}
+  - 1.根据给定的接口发送http请求,
+  - 2.判断返回的数据是否正确.
+  - 3.如果通过验证,则弹出登录成功,跳转到首页路由
+    - vue中使用this.$router.push('/')来实现路由跳转
+  - 4.如果未通过验证,则提示登录失败,将openLoading的值置为false
+
+# 前端登录状态存储
+  - 当返回数据成功后,使用一个promise函数,将登录返回的token放到LocalStorage里面
+  - 后续和登录一样
+  - 再生命周期中的created中,新增一个判断是否登录的代码如下
+```
+if(localStorage.userInfo){
+  Toast.success('登录成功');
+  this.$router.push('')
+}
+```
+
+# 使用fs模块提纯json中的数据
+  - 首先准备一个5W条数据的json文件:https://github.com/shenghy/SmileVue/blob/master/service/data_json/goods.json, 将该数据存到本地的 goods.json中
+  - fs读取文件
+```
+const fs = require('fs');
+fs.readFile('./goods.json','utf8',(err,data)=>{
+  const newData = JSON.parse(data);
+  let i =0;
+  newData.RECORDS.map((value,index)=>{
+    if(value.IMAGE1 !== null){
+      pushData.push(value);
+    }
+  })
+})
+```
+  - 写文件操作
+  - 假设数据都在pushData数组中
+```
+fs.writeFile('./newsGoods.json', JSON.stringify(pushData), (err)=>{
+  if(err) console.log('写文件操作失败')
+  else console.log('写文件操作成功')
+})
+```
+
+# 使用mongoose写一个集合的规则
+  - 首先要设计数据结构
+  - 下面是newGoods.json里面的一条数据
+```
+ {
+    "ID": "ff89cf2e14e143dc9e49ad75f7bc7bb0",
+    "GOODS_SERIAL_NUMBER": "6901844910651",
+    "SHOP_ID": "402880e860166f3c0160167897d60002",
+    "SUB_ID": "2c9f6c94609a62be0160a024fff1001d",
+    "GOOD_TYPE": 0,
+    "STATE": 0,
+    "IS_DELETE": 1,
+    "NAME": "味好美番茄沙司(特惠装)340gx2/份",
+    "ORI_PRICE": 15.5,
+    "PRESENT_PRICE": 9.9,
+    "AMOUNT": 10000,
+    "DETAIL": '<div>Hi Mongoose</div>',
+    "BRIEF": null,
+    "SALES_COUNT": 0,
+    "IMAGE1": "http://images.baixingliangfan.cn/shopGoodsImg/20180223/20180223091019_7384.jpg",
+    "IMAGE2": null,
+    "IMAGE3": null,
+    "IMAGE4": null,
+    "IMAGE5": null,
+    "ORIGIN_PLACE": null,
+    "GOOD_SCENT": null,
+    "CREATE_TIME": 1512208899918,
+    "UPDATE_TIME": 1519725197992,
+    "IS_RECOMMEND": 0,
+    "PICTURE_COMPERSS_PATH": "http://images.baixingliangfan.cn/compressedPic/20180223091019_7384.jpg"
+}
+```
+  - 1.导入mongoose
+  - 2.使用mongoose提供的Schema
+  - 3.设计的goodsSchema
+  - 4.暴露goodsSchema,供其他使用
+```
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
+
+const goodsSchema = new Schema({
+    ID: { unique: true, type: String },
+    GOODS_SERIAL_NUMBER: String,
+    SHOP_ID: String,
+    SUB_ID: String,
+    GOOD_TYPE: Number,
+    STATE: Number,
+    NAME: String,
+    ORI_PRICE: Number,
+    PRESENT_PRICE: Number,
+    AMOUNT: Number,
+    DETAIL: String,
+    BRIEF: String,
+    SALES_COUNT: Number,
+    IMAGE1: String,
+    IMAGE2: String,
+    IMAGE3: String,
+    IMAGE4: String,
+    IMAGE5: String,
+    ORIGIN_PLACE: String,
+    GOOD_SCENT: String,
+    CREATE_TIME: String,
+    UPDATE_TIME: String,
+    IS_RECOMMEND: Number,
+    PICTURE_COMPRESS_PATH: String
+}, {
+    collections: 'Goods'
+})
+
+// 将建立的规则发布到model上面
+mongoose.model('Goods', goodsSchema);
+```
+
+
+# 数据库的初始化操作
+  - 连接的数据库的名称
+  - 包含连接数据库
+  - 初始化所有的Schemas
+  - 暴露给其他页面使用的接口
+```
+const mongoose = require('mongoose');
+const db = 'mongodb://localhost/smile-vue'
+const glob = require('glob');
+const { resolve } = require('path');
+
+exports.initSchemas = () => {
+    glob.sync(resolve(__dirname, './schema', '**/*.js')).forEach(require);
+}
+
+exports.connect = () => {
+    // 连接数据库
+    mongoose.connect(db);
+    // 最大连接次数...
+    let maxConnectTimes = 0;
+
+    return new Promise((resolve, reject) => {
+        // 增加数据库监听事件
+        mongoose.connection.on('disconnected', (err) => {
+            if (maxConnectTimes <= 3) {
+                maxConnectTimes++;
+                mongoose.connect(db);
+                console.log(`正在第${maxConnectTimes}次连接数据库...`);
+            } else {
+                reject(err);
+                throw new Error('数据库出现问题,程序无法搞定,请认为修理....');
+            }
+        });
+
+        mongoose.connection.on('error', () => {
+            console.log('[error] 数据库出错');
+            mongoose.connect(db);
+        })
+
+        mongoose.connection.once('open', () => {
+            console.log('[ok] MongoDB connected successfully');
+            resolve()
+        })
+    })
+}
+```
+
+# 导入大量数据到mongoDB
+  - 假设数据在newGoods.json文件中
+  - 假设数据在MongoDB中的model是Goods
+```
+const Router = require('koa-router');
+let router = new Router();
+
+const mongoose = require('mongoose');
+const fs = require('fs');
+
+router.get('/insertAllGoodsInfo', async (ctx)=>{
+  fs.readFile('./newGoods.json', 'utf8', (err, data)=>{
+    data = JSON.parse(data);
+    let saveCount = 0;
+    const Goods = mongoose.model('Goods');
+    data.map((value, index) =>{
+      console.log(value);
+      let newsGoods = new Goods(value);
+      newGoods.save()
+      .then(()=>{
+        saveCount++;
+        console.log(`成功${saveCount}`);
+      })
+      .catch(error=>{
+        console.log(MediaStreamErrorEvent);
+      })
+    })
+  })
+  ctx.body ='开始导入数据'
+})
+```
+
 #
-
-
-

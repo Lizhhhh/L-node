@@ -11,12 +11,12 @@ app.use(cors());
 
 
 let user = require('./appApi/user.js');
-let home = require('./appApi/home.js');
+let goods = require('./appApi/goods.js');
 let router = new Router();
 
 router
     .use('/user', user.routes())
-    .use('/home', home.routes())
+    .use('/goods', goods.routes())
 
 
 // 加载路由中间件

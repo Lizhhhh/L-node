@@ -11,7 +11,8 @@ const URL = {
     getfloor3Info: BASEURL + 'floor3',
     getfloorNameInfo: BASEURL + 'floorName',
     gethotGoodsInfo: BASEURL + 'hotGoods',
-    registerUser: LOCALURL + 'user/register'
+    registerUser: LOCALURL + 'user/register',
+    login: LOCALURL + 'user/login'
 }
 
 module.exports = URL;

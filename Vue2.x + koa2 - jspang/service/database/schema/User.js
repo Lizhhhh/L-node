@@ -36,6 +36,18 @@ UserSchema.pre('save', function(next) {
     })
 })
 
+// User的方法
+UserSchema.methods = {
+    comparePassword: (_password, password) => {
+        return new Promise((resolve, reject) => {
+            bcrypt.compare(_password, password, (err, isMatch) => {
+                if (!err) resolve(isMatch)
+                else reject(err)
+            })
+        })
+    }
+}
+
 // 发布模型
 // 此时User要和数据库表中的名字一样.
 mongoose.model('User', UserSchema)
