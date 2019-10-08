@@ -1,5 +1,20 @@
 # lzhhc-vue2koa2
 
+# 重要(important!)
+  - 下载项目后,需要按照如下方式启动
+```
+// 1.
+npm run dev
+// 2.
+npm run server
+// 3.
+mongod
+// 4.
+cd service
+node index.js
+```
+
+
 > A Vue.js project
 
 ## Build Setup
