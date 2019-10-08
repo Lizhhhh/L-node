@@ -1391,4 +1391,113 @@ router.get('/insertAllGoodsInfo', async (ctx)=>{
 })
 ```
 
-#
+# koa-router查找mongoDB中的数据,并返回
+  - findOne接口
+```
+const Router = require('koa-router');
+const router = new Router();
+const mongoose = require('mongoose');
+
+router.post('/getDetailGoodsInfo', async (ctx) =>{
+  const goodsId = ctx.request.body.goodsId;
+  const Goods = mongoose.model('Goods');
+  await Goods.findOne({ID: goodsId}).exec()
+  .then(async (result)=>{
+    ctx.body = {
+      code:200,
+      message: result
+    }
+  })
+  .catch(error =>{
+    console.log(error);
+    ctx.body ={
+      code:500,
+      message:error
+    }
+  })
+})
+```
+
+# 热卖商品,点击跳转复习
+  - 点击页面中的热卖商品,跳转到热卖商品的详情页
+  - 在父组件(ShoppingMall.vue)中使用<goods-info>导入子组件(goodsInfoComponent.vue)
+  - 父组件通过 :goodsId 向子组件传递信息,传递的信息为 item.goodsId
+  - 子组件中: 监听点击事件 goGoodsPage方法.
+  - goGoodsPage方法中,有一个this.$router.push({name:'Goods',query:{goodsId:this.goodsId}})
+  - 会跳到name为Goods的组件(在router/index.js中可以找到),同时会传递goodsId信息给子组件
+
+# Toast 引入
+```
+import { Toast } from 'vant'
+```
+
+# 过滤器的引用
+  - filter文件夹下面有一个 moneyFilter.js里面是规范价格的过滤函数
+  - vue中有一个filters属性,用来注册过滤器
+  - 在需要的页面导入moneyFilter.js,然后注册过滤函数即可使用过滤器
+```
+import { toMoney } from '@/filter/moneyFilter.js'
+
+export default{
+  data(){
+    return{
+      ...
+    }
+  },
+  filters:{
+    moneyFilter(money){
+      return toMoney(money)
+    }
+  }
+}
+```
+
+# 使用vant中的 tabs和tab 进行布局
+  - 由于全局都可能会用到,首先在全局中按需导入
+```
+// main.js
+import Vue from 'vue'
+import { Tab, Tabs } from 'vant'
+Vue
+.use(Tab)
+.use(Tabs)
+```
+  - 使用基本模板
+```
+<div>
+  <van-tab title="商品详情">商品详情</van-tab>
+  <van-tab title="评论">评论</van-tab>
+</div>
+```
+
+# 导航栏反白效果制作
+  - 类如下
+```
+.categoryActice {
+  background-color: #fff;
+}
+```
+  - ul如下
+```
+<ul>
+  <li v-for ="(item, index) in category" :key="index" @click="clickCategory(index)" :class="{categortActice:categoryIndex === index}">
+  </li>
+</ul>
+```
+  - data和点击方法
+```
+data() {
+  return {
+    categoryIndex: 0]
+  }
+},
+methods: {
+  clickCategory(index) {
+    this.categoryIndex = index;
+  }
+}
+
+```
+
+
+

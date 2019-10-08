@@ -65,7 +65,8 @@
         <van-list>
           <van-row gutter="20">
             <van-col span="12" v-for="(item, index) in hotGoods" :key="index">
-              <goods-info :goodsImage="item.image" :goodsName="item.name" :goodsPrice="item.price"></goods-info>
+              <goods-info :goodsId="item.goodsId" :goodsImage="item.image" :goodsName="item.name"
+                :goodsPrice="item.price"></goods-info>
             </van-col>
           </van-row>
         </van-list>
@@ -114,7 +115,7 @@ export default {
     }
   },
   created() {
-    // 测试用例
+    // // 测试用例
     // axios
     //   ({
     //     url: api.getIndexInfo,
@@ -144,6 +145,7 @@ export default {
         method: 'get'
       })
       .then(response => {
+        console.log('test111 --- >>>', response);
         if (response.status === 200) {
           this.category = response.data;
         }
@@ -336,6 +338,11 @@ export default {
   font-size: 14px;
   height: 1.8rem;
   line-height: 1.8rem;
+}
+.hot-goods {
+  height: 130rem;
+  overflow: hidden;
+  background-color: #fff;
 }
 </style>
 
