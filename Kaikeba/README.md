@@ -10,3 +10,6 @@
   9. Koa实战Restful接口
   10. 部署Linux - Ngnix - Pm2 CI DevOps
 
+# NODE-01
+  开始时间: 2019年11月3日
+  笔记: https://github.com/Lizhhhh/L-node/tree/master/Kaikeba/NODE-01
