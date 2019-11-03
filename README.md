@@ -1,19 +1,12 @@
 # L-node
   + node资料归类
 
-# 学习笔记
-  + Egg+Vue+Docker (未完待续...)
-  + Koa + Node.js: 笔记在博客 https://blog.csdn.net/piano9425/  (欢迎关注)
-  + koa2-jspang 完整笔记: https://github.com/Lizhhhh/L-node/tree/master/koa2%20-%20jspang
-  + MongoDB - jspang: https://github.com/Lizhhhh/L-node/tree/master/MongoDB%20-%20jspang
-  + Node.js 开发实战 (未完待续...)
-  + Vue2.x + koa2 - jspang: https://github.com/Lizhhhh/L-node/tree/master/Vue2.x%20%2B%20koa2%20-%20jspang
-
-
 # 1.koa2-jspang:
-  +传送门: http://www.jspang.com/posts/2017/11/13/koa2.html
+  传送门: http://www.jspang.com/posts/2017/11/13/koa2.html
 
 # 2.MongoDB - jspang:
-  +传送门 http://www.jspang.com/posts/2017/12/16/mongodb.html
+  传送门 http://www.jspang.com/posts/2017/12/16/mongodb.html
 
 # 3.Kaikeba
+  开始时间: 2019年11月3日
+  传送门: https://www.bilibili.com/video/av71365439/?p=16

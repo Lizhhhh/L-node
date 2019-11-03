@@ -1,0 +1,25 @@
+{
+  // 使用 IntelliSense 了解相关属性。
+  // 悬停以查看现有属性的描述。
+  // 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "c++(Windows) 启动",
+      "type": "cppvsdbg",
+      "request": "launch",
+      "program": "输入程序名称，例如 ${workspaceFolder}/a.exe",
+      "args": [],
+      "stopAtEntry": false,
+      "cwd": "${workspaceFolder}",
+      "environment": [],
+      "externalConsole": false
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "node启动程序",
+      "program": "${workspaceFolder}/01-module.js"
+    }
+  ]
+}
