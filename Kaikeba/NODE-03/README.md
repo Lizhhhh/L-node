@@ -153,3 +153,184 @@ $ docker image tag koa-demos:0.0.1 lzhhc/koa-demos:0.0.1
 ````bash
 $ docker image push lzhhc/koa-demos:0.0.1
 ````
+
+# YAML语言教程
+YAML支持的数据结构:
+ - 对象: 键值对的集合,又称为映射(mapping)/ 哈希(hashers) / 字典(dictionary)
+ - 数组: 一组按次序排列的值,又称为序列(sequence) / 列表(list)
+ - 纯量(scalars): 单个的、不可再分的值
+
+# 对象
+````javascript
+// yaml
+animal: pets
+
+// javascript
+{ animal: 'pets'}
+
+// yaml
+hash: {name: Steve, foo: bar}
+
+// javascript
+{hash: {name: 'Steve', foo: 'bar' }}
+````
+# 数组
+````javascript
+// yaml
+- Cat
+- Dog
+- Goldfish
+
+// javascript
+['Cat','Dog','Goldfish']
+
+// yaml
+-
+ - Cat
+ - Dog
+ - Goldfish
+
+// javascript
+[['Cat', 'Dog', 'Goldfish']]
+
+// yaml
+animal: [Cat, Dog]
+
+// javascript
+{animal: ['Cat', 'Dog'] }
+````
+
+# 复合结构
+````javascript
+// yaml
+language:
+ - Ruby
+ - Perl
+ - Python
+websites:
+  YAML: yaml.org
+  Ruby: ruby-lang.org
+  Python: python.org
+  Perl: use.perl.org
+
+// javascript
+{
+  language: ['Ruby', 'Perl', 'Python'],
+  websites:{
+    YAML: 'yaml.org',
+    Ruby: 'ruby-lang.org',
+    Python: 'python.org',
+    Perl: 'user.perl.org'
+  }
+}
+````
+
+# 纯量
+````javascript
+// 数值
+number: 12.30
+
+// 布尔值
+isSet: true
+
+// null
+parent: ~
+
+// 时间
+iso8601: 2001-12-14t21:59:43. 10-05:00
+
+// 日期
+date: 1976-07-31
+````
+
+# 字符串
+````javascript
+// '|'保留换行符、'>'折叠换行
+// yaml
+this: |
+  Foo
+  Bar
+that: >
+  Foo
+  Bar
+
+// javascript
+{
+  this: 'Foo\nBar\n',
+  that: 'Foo Bar\n'
+}
+
+// '+'表示保留文字末尾的换行,'-'表示删除末尾的换行
+// yaml
+s1: |
+  Foo
+s2: |+
+  Foo
+
+s3: |-
+  Foo
+
+// javascript
+{
+  s1: 'Foo\n',
+  s2: 'Foo\n\n\n',
+  s3: 'Foo'
+}
+
+// 字符串之中可以插入HTML标记
+// yaml
+message: |
+  <p style="color: red">
+    段落
+  </p>
+
+// javascript
+{
+  massage: '\n<p style="color: red">\n 段落\n</p>\n'
+}
+````
+
+# 引用
+````javascript
+deafaults: &defaults
+  adapter: postgres
+  host: localhost
+
+development:
+  database: myapp_development
+  <<: *defaults
+
+test:
+  database: myapp_test
+  <<: *defaults
+````
+等同于下面代码:
+````javascript
+deafaults: &defaults
+  adapter: postgres
+  host: localhost
+
+development:
+  database: myapp_development
+  adapter: postgres
+  host: localhost
+
+test:
+  database: myapp_test
+  adapter: postgres
+  host: localhost
+````
+&用来建立锚点(defaults)
+<<表示合并到当前数据
+*用来引用锚点
+````javascript
+// yaml
+- &showell Steve
+- Clark
+- Brian
+- Oren
+- *showell
+
+// javascript
+['Steve', 'Clark', 'Brian', 'Oren', 'Steve']
+````
