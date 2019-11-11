@@ -334,3 +334,97 @@ test:
 // javascript
 ['Steve', 'Clark', 'Brian', 'Oren', 'Steve']
 ````
+
+# 自建 WordPress 容器
+新建一个工作目录,并进入该目录
+````javascript
+$ mkdir docker-demo && cd docker-demo
+````
+
+
+
+# Docker Compose 工具
+是Docker公司推出的一个工具软件,可以管理多个Docker容器组成一个应用。
+根据docker-compose.yml处理多个容器之间的调用关系.
+- 启动/关闭 所有容器
+````javascript
+$ docker-compose up
+
+$ docker-compose stop
+````
+- 查看 docker compose
+````javascript
+$ docker-compose --version
+````
+
+# docker-compose.yml
+是创建集群的依赖文件,docker-compose会根据这个文件去下载,形成依赖
+- [1] 编写如下文件
+注： /NODE-03/docker-compose.yml
+````yml
+version: '3.1'
+services:
+  mongo:
+    image: mongo
+    restart: always
+    ports:
+        - 27017:27017
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - 8081:8081
+  mysql:
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+    ports:
+      - 3306:3306
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+  redis:
+    image: redis
+    ports:
+      - 6379:6379
+````
+
+- [2] 登录
+````bash
+docker login
+````
+
+- [3] 构建环境
+````bash
+docker-compose up
+````
+
+# node.js中实现持久化的多种方法
+- 文件系统 fs
+- 数据库
+  + 关系型数据库-mysql
+  + 文档型数据库-mongodb
+  + 键值对数据库-redis
+
+# 文件系统数据库
+````javascript
+// fsdb.js
+// 实现一个文件系统读写数据库
+const fs = require('fs');
+
+function get(key){
+  fs.readFile('./db.json', (err,data)=>{
+    const json = JSON.parse(data);
+    console.log(json[key]);
+  });
+}
+function set(key, value){
+  fs.readFile('./db.json', (err,data) =>{
+    // 可能是空文件, 则设置为空对象
+    const json = data ? JSON.parse(data) : {};
+  })
+}
