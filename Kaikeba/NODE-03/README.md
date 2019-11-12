@@ -1,3 +1,7 @@
+# 1.持久化-mysql-docker
+- 开始时间: 2019年11月11日
+- 笔记链接: https://github.com/Lizhhhh/L-node/blob/master/Kaikeba/NODE-03/%E6%8C%81%E4%B9%85%E5%8C%96-mysql-docker/README.md
+
 # 数据持久化 - MySQL
  - 课堂目标
   + 掌握node.js中实现持久化的多种方法
@@ -403,28 +407,3 @@ docker login
 docker-compose up
 ````
 
-# node.js中实现持久化的多种方法
-- 文件系统 fs
-- 数据库
-  + 关系型数据库-mysql
-  + 文档型数据库-mongodb
-  + 键值对数据库-redis
-
-# 文件系统数据库
-````javascript
-// fsdb.js
-// 实现一个文件系统读写数据库
-const fs = require('fs');
-
-function get(key){
-  fs.readFile('./db.json', (err,data)=>{
-    const json = JSON.parse(data);
-    console.log(json[key]);
-  });
-}
-function set(key, value){
-  fs.readFile('./db.json', (err,data) =>{
-    // 可能是空文件, 则设置为空对象
-    const json = data ? JSON.parse(data) : {};
-  })
-}
