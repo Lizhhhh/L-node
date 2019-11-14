@@ -1,6 +1,10 @@
-# 1.持久化-mysql-docker
+# 1.[笔记]持久化-mysql-docker
 - 开始时间: 2019年11月11日
 - 笔记链接: https://github.com/Lizhhhh/L-node/blob/master/Kaikeba/NODE-03/%E6%8C%81%E4%B9%85%E5%8C%96-mysql-docker/README.md
+
+# 2.[笔记]market
+- 开始事件: 2019年11月14日
+- 笔记链接
 
 # 数据持久化 - MySQL
  - 课堂目标
