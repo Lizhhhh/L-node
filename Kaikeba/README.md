@@ -11,13 +11,21 @@
   10. 部署Linux - Ngnix - Pm2 CI DevOps
 
 # NODE-01
-  开始时间: 2019年11月3日
-  笔记: https://github.com/Lizhhhh/L-node/tree/master/Kaikeba/NODE-01
+- 开始时间: 2019年11月3日
+- 笔记: https://github.com/Lizhhhh/L-node/tree/master/Kaikeba/NODE-01
 
 # NODE-02
-  开始时间: 2019年11月3日
-  笔记: https://github.com/Lizhhhh/L-node/tree/master/Kaikeba/NODE-02
+- 开始时间: 2019年11月3日
+- 笔记: https://github.com/Lizhhhh/L-node/tree/master/Kaikeba/NODE-02
 
 # NODE-03
-  开始时间: 2019年11月4日
-  笔记: https://github.com/Lizhhhh/L-node/tree/master/Kaikeba/NODE-03
+- 开始时间: 2019年11月4日
+- 笔记: https://github.com/Lizhhhh/L-node/tree/master/Kaikeba/NODE-03
+
+# Persistence mongoDB
+- 开始时间: 2019年11月13日
+- 笔记: https://github.com/Lizhhhh/L-node/blob/master/Kaikeba/Persistence%20mongoDB/README.md
+
+# NODE-04
+- 开始时间: 2019年11月14日
+- 笔记: https://github.com/Lizhhhh/L-node/tree/master/Kaikeba/NODE-04

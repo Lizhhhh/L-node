@@ -4,7 +4,7 @@
 
 # 2.[笔记]market
 - 开始事件: 2019年11月14日
-- 笔记链接
+- 笔记链接: https://github.com/Lizhhhh/L-node/blob/master/Kaikeba/NODE-03/market/README.md
 
 # 数据持久化 - MySQL
  - 课堂目标
