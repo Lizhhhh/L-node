@@ -12,15 +12,15 @@
 
 # NODE-01
 - 开始时间: 2019年11月3日
-- 笔记: https://github.com/Lizhhhh/L-node/tree/master/Kaikeba/NODE-01
+- 笔记: https://github.com/Lizhhhh/L-node/blob/master/Kaikeba/NODE-01/README.md
 
 # NODE-02
 - 开始时间: 2019年11月3日
-- 笔记: https://github.com/Lizhhhh/L-node/tree/master/Kaikeba/NODE-02
+- 笔记: https://github.com/Lizhhhh/L-node/blob/master/Kaikeba/NODE-02/README.md
 
 # NODE-03
 - 开始时间: 2019年11月4日
-- 笔记: https://github.com/Lizhhhh/L-node/tree/master/Kaikeba/NODE-03
+- 笔记: https://github.com/Lizhhhh/L-node/tree/master/Kaikeba/NODE-03/README.md
 
 # Persistence mongoDB
 - 开始时间: 2019年11月13日
@@ -28,8 +28,8 @@
 
 # NODE-04
 - 开始时间: 2019年11月14日
-- 笔记: https://github.com/Lizhhhh/L-node/tree/master/Kaikeba/NODE-04
+- 笔记: https://github.com/Lizhhhh/L-node/tree/master/Kaikeba/NODE-04/README.md
 
 # Koa实战
 - 开始时间: 2019年11月16日
-- 笔记: https://github.com/Lizhhhh/L-node/tree/master/Kaikeba/Koa实战
+- 笔记: https://github.com/Lizhhhh/L-node/blob/master/Kaikeba/Koa%E5%AE%9E%E6%88%98/README.md
