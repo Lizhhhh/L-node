@@ -1,3 +1,25 @@
+# 处理上下文代码的两个阶段
+## 1.进入执行上下文
+### 执行上下文的3个属性:
+- 变量对象(Variable Object, VO)
+- 作用域链(Scope chain)
+- this
+### 进入执行上下文需要做的3件事:
+1. 确定变量对象
+如何确定变量对象?
+- 首先确定函数的形参
+变量对象的一个属性,其属性名就是形参的名字,其值就是实参的值;对于没有传递的参数,其值为undefined
+- 其次确定函数的声明
+其属性名和值都是函数对象创建出来的;如果变量对象已经包含了相同名字的属性,则替换它
+- 最后确定变量声明
+其属性名为变量名,其值为undefined;如果变量名和已经声明的函数名或者函数的参数名相同,则不影响已经存在的属性.
+
+
+2. 确定作用域链
+
+
+
+
 # EventLoop
 - 一个循环,每一次的循环叫tick,每次循环执行的代码叫task
 - v8引擎是单线程,无法同时干两件事
@@ -18,27 +40,21 @@ tasks(宏任务):
 - I/O
 - UI渲染
 
-# 单线程的含义:
-浏览器是多进程(multi-process),一个浏览器只有一个浏览进程(Browser Process),负责管理Tabs、协调其他进程(process)和渲染进程(Render process,内存中的位图到页面的像素点上);
-在Chrome中,一个Tab对于一个渲染进程,渲染进程是多线程,其中主线程负责页面的渲染、JS的执行和事件循环;前后端交互用的网络组件可以开2~6个 I/O 线程去处理
 
-# 浏览器中的事件循环
-- 执行全局Script的同步代码
-- 执行microtask任务
-- 从宏任务队列中取出队首一个任务
-- 执行该任务
-- 任务执行完毕,检查是否有微任务(有则执行,否则执行第一步)
+# 进程
+操作系统最小执行单位,一个进程占用一个端口.一个进程可以包含多个线程.多个线程之间可以实现并发.
 
-# Node.js的Event Loop过程:
-1. 执行全局Script的同步代码
-2. 执行microtask微任务,先执行所有 Next Tick Queue中的所有任务,再执行Other Microtask Queue中的所有任务
-3. 开始执行macrotask宏任务,共6个阶段,从第1个阶段开始执行相应每一个阶段macrotask中的**所有任务**,六个阶段: Timers Queue -> 步骤2 -> I/O Queue -> 步骤2 -> Check Queue -> 步骤2 -> Close Callback  Queue -> 步骤2 -> Timers Queue...
+# 浏览器
+- 浏览器是多进程,一个浏览器只有一个主进程:负责管理Tabs、协调其他进程和渲染进程(Render Process),将内存中的位图(bitMap)绘制到页面的像素(pixel)上
+- 在Chrome中,一个Tab对应一个渲染进程,渲染进程是多线程(multi-thread),其中:主线程(main thread)负责页面渲染(GUI render engine,用户图形界面渲染引擎)、执行JS(JS engine) 和 event loop
+- 求后端网络服务之间,可以开 2~6个 I/O 线程去平行处理
 
 
-- MacroTask包括: setTimeout、setInterval、setImmediate(Node)、requestAnimation(浏览器)、IO、UI rendering(浏览器)
-- MicroTask包括:s process.nextTick(Node)、Promise.then、Object.observe、MutationObserver
+# 浏览器中的事件循环的位置
+- 以Chrome浏览器为例:
+Chrome浏览器(现在)是多进程,其中,每个Tabs都是一个独立的进程.每个Tabs又是多线程的,其中的主线程负责:
+1. 页面渲染(GUI render engine)
+2. 执行JS (JS engine)
+3. event loop
 
-# setTimeout 和 setImmediate
-- setImmediate():方法用于中断长时间运行的操作,并在完成其他操作后立即运行回调函数
-- setTimeout/setInterval的第二个参数取值范围是: [1, 2^31 -1],如果超过这个范围就会初始化为1,即 setTimeout(fn, 0) === setTimeout(fn, 1)
-
+- 即: event loop 位于每个进程中主线程的主线程中
