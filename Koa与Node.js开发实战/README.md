@@ -392,7 +392,8 @@ app.use(nunjucks({
 }))
 ````
 注: 配置要在router前面
-- 使用 (controller/home.js)
+- 使用 (ctx.render(path))
+- /controller/home.js
 ````javascript
 user: async (ctx, next) =>{
   await ctx.render('home/login',{
@@ -402,4 +403,298 @@ user: async (ctx, next) =>{
 ````
 
 # MVC结构分析
-- 2019年11月30日
+- `app.js`:主要进行了一些配置
+- `router.js`:将路由和路由的处理函数联系在一起
+- `controller/home.js`:进行简单的逻辑处理
+- `service/home.js`:为controller服务,进行更深一级的处理
+
+# 理清MVC的历程:
+- 当我打开浏览器输入`http://localhost:3000`时,
+- `router.js`会根据配置好的规则,找到对应的时间处理器`HomeController.index`
+- `HomeController.index`会调用`Nunjucks`渲染的模板给浏览器渲染出来
+
+# content-type
+- 有服务器返回,指定返回的类型.
+- 浏览器会根据这个类型进行响应的渲染.
+- 栗子: `content-type: text/html`: 浏览器会将其渲染成html页面
+
+# koa-json
+- 把数据挂载到响应体body上,同时告知客户端数据类型是JSON,客户端就会按照JSON格式来解析
+````javascript
+ctx.set('Content-Type', 'application/json');
+ctx. body = JSON.stringify(json);
+````
+
+# 中间件的管理
+- 文件middleware/index.js用来集中调用所有的中间件
+````javascript
+const path = require('path');
+const bodyParser = require('koa-bodyparser');
+const nunjucks = require('koa-nunjucks-2');
+const staticFiles = require('koa-static');
+const miSend = require('./mi-send');
+
+module.exports = app =>{
+  app.use(staticFiles(path.resolve(__dirname, '../public')));
+  app.use(nunjucks({
+    ext: 'html',
+    path: path.join(__dirname, '../views'),
+    nunjucksConfig:{
+      trimBlocks: true
+    }
+  }));
+  app.use(bodyParser());
+  app.use(miSend());
+}
+````
+- 在app.js增加对中间件的引用
+````javscript
+const Koa = require('koa');
+const app = new Koa();
+const router = require('./router');
+const middleware = require('./middleware');
+middleware(app);
+router(app);
+app.listen(3000, async () =>{
+  console.log('Server is running at http://localhost:3000');
+});
+````
+
+# 使用koa-multer实现文件上传
+````javascript
+const koa = require('koa');
+const multer = require('koa-multer');
+const app = koa();
+app.use(multer({dest: './uploads'}));
+app.listen(3000);
+````
+- 参数说明:
+`dest`: 用来设置上传文件的存储地址,若省略,则存储在内存中
+
+# 上传文件的基本配置
+- upload.single(filename)
+接收一个fieldname参数命名的文件,文件信息保存在req.files中,关键代码如下:
+````javascript
+<input name='avatar' type='file' />  // 视图代码
+router.post('/profile', upload.single('avatar'));  // 应用代码
+````
+- upload.array(fieldname[,maxCount])
+接收一个fieldname参数命名的文件数组。通过配置maxCount来限制上传的最大数量,文件信息保存在req.files
+
+# 数据库
+数据库就是存储、管理数据的仓库,它提供了对数据的检索、存储、多用户共享访问的能力,并且设法使数据的冗余度尽可能小。主要具备以下特点:
+- `数据共享`: 数据库中的数据可以同时被多人查询和写入
+- `减少数据冗余度`: 实现了数据共享,从而避免了文件的复制,降低了数据冗余度
+- `数据独立`: 数据库中的数据与业务是独立的
+- `数据一致性和可维护性`: 数据库中的数据应当保持一致,以防止数据丢失和越权使用。在同一周期内,既能允许对数据实现多路存取,也能防止用户之间的数据操作互相影响
+- `故障恢复`: 可以及时发现故障和修复故障,从而防止数据被破坏
+
+# Sequelize介绍
+- 为了快捷开发,社区出现了一系列的ORM(Object Relational Mapping)类库
+- ORM的字面意思为对象关系映射,它提供了概念性的、易于理解的模型化数据的方法。通过ORM,可以降低操作数据库的成本。开发者不需要通过编写SQL脚本来操作数据库,直接通过访问对象的方式来查询、更新数据。这样做极大地提升了开发效率,降低了开发门槛。缺点也很明显,不够高效
+- 在Node.js中,一般采用Sequelize这个ORM类库来操作数据库.
+````javascript
+const Sequelize = require('sequelize');
+const sequelize = new Sequelize('databaseName', 'userName', 'password', {
+  host:'localhost',  // 数据库服务地址
+  dialect: 'mysql'   // SQL语言类型
+});
+sequelize.authenticate().then(()=>{
+  console.log('Connected');
+}).catch(err=>{
+  console.error('Connect failed');
+})
+````
+
+- 使用docker创建一个数据库.
+使用`docker-compose.yml`写配置文件如下:
+````yml
+version: '3.1'
+services:
+  mysql:
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MTSQL_ROOT_PASSWORD: example
+    ports:
+      - 3306:3306
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+````
+使用如下命令生成docker
+````bash
+docker-compose up
+````
+# 连接数据库
+````javascript
+const Sequelize = require('sequelize');
+const sequelize = new Sequelize('数据库名称','用户名(默认:root)','密码(docker-compose.yml中设置的)', {
+  host:'localhost',
+  dialect: 'mysql'
+});
+sequelize.authenticate().then(()=>{
+  console.log('Connected');
+})
+.catch(err=>{
+  console.error('Connect failed', err);
+})
+````
+
+# 定义模型
+- 常用
+````javascript
+const Category = sequelize.define('category', {
+  id: Sequelize.UUID,   // 定义id字段,类型为UUID
+  name: Sequelize.STRING    // 定义name字段,类型为String
+})
+````
+- 给模型加约束条件
+````javascript
+const Project = sequelize.define('project', {
+  name: {
+    type: Sequelize.STRING,   // 定位类型为String
+    allowNull: false,   //不能为空
+    unique： true   // 必须唯一,不允许重复
+  },
+  date: {
+    type: Sequelize.DATE,
+    defaultValue: Sequelize.NOW     // 设置为当前时间
+  }
+})
+````
+
+- 给字段定义Getter和Setter方法:
+````javascript
+const Custom = sequelize.define('custom', {
+  name: {
+    type: Sequelize.STRING,
+    get(){
+      const title = this.getDataValue('title');
+      return `${this.getDataValue('name')} (${titile}) `
+    }
+  },
+  title: {
+    title: Sequelize.STRING,
+    set (val) {
+      this.setDataValue('title', val.toUpperCase())
+    }
+  }
+})
+````
+
+# 查询数据
+- 查询所有
+`await Product.findAll()`
+
+- 查询name和data字段
+`await Project.findAll({ attributes: ['name', 'date'] })`
+
+# 在使用一个库的时候,可以先把库的方法包装以下,变成自己的库
+
+
+# 使用Mongoose对MongoDB进行操作
+````javascript
+const mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost/test',{
+})
+````
+
+# Mongoose中的Schema
+- 定义Schema `categorySchema`
+````javascript
+const categorySchema = new mongoose.Schema({
+  name:String,
+  description: String,
+  createdAt:{
+    type: Date,
+    default: Date.now
+  }
+});
+````
+- 通过model方法获得该模型
+````javascript
+const Category = mongoose.model('Category', categorySchema);
+````
+- 实例化一个新的对象来新增数据
+````javascript
+const category = new Category({
+  name: 'test',
+  description: 'test category'
+});
+````
+- 通过save方法,保持对象到数据库中
+````javascript
+category.save(err=>{
+  if(err){
+    console.error(err);
+    return
+  }
+  console.log('saved');
+})
+````
+- 直接通过模型的Create方法
+````javascript
+Category.create({
+  name:'test',
+  description: 'test category'
+}, (err, category)=>{
+  if(err){
+    console.error(err);
+  } else {
+    console.log(category)
+  }
+});
+````
+
+- 通过find方法,查询name='test'的结果
+````javascript
+Category.find({
+  name:'test'
+}, (err, res) =>{
+  if(err){
+    console.error(err)
+  } else{
+    console.log(res);
+  }
+});
+````
+- 删除数据
+````javascript
+Category.remove({
+  name:'test'
+}).then(()=>{
+})
+````
+- 更新数据
+````javascript
+Category.update({
+  name:'test'
+},{
+  name:'test1',
+  description: 'test1'
+}).thenm(()=>{
+
+})
+````
+
+# Redis
+- 可用作数据库、高速缓存和消息队列代理。
+- 非常适合处理那些短时间内被高频访问但又不需要长期访问的简单数据存储
+- 栗子: 用户的登录信息或游戏中的数据
+- 会把数据存储在内存中,但是也可以持久化到硬盘上
+
+# 会话控制
+- `Session`: HTTP是一种无状态的协议,本身无法标识一次特定的会话,Session是一种保存会话信息的实现方式,有了Session,不同用户登录购物网站之后就能看到各自购物车中的商品了.
+- Session中的数据是保存在服务器端的
+- 在服务器端有很多种存储方式,既可以直接保存在内存内,也可以保存在Redis、MongoDB、MySQL等数据库中,甚至可以保存在普通的文件中
+- Session中的数据一般都是短时间内高频访问的,需要保证性能,所以比较好的方式是内存配合Redis做一个持久化.
+- 内存访问的性能是最好的,但数据易丢失.
+- 在Redis中做一个备份,当内存中数据丢失的时候,就可以从redis中恢复数据!
+
+# 客户端的会话控制
+- 客户端通过Cookie来保存Session的一个唯一标识
+- 通常是一个ID,通过这个ID可以匹配服务器端完整的Session数据
