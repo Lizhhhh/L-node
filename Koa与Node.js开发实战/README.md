@@ -397,7 +397,7 @@ app.use(nunjucks({
 ````javascript
 user: async (ctx, next) =>{
   await ctx.render('home/login',{
-    btnName: 'GoGoGo'
+    btnName: 'GoGoGo'0
   })
 }
 ````
@@ -698,3 +698,58 @@ Category.update({
 # 客户端的会话控制
 - 客户端通过Cookie来保存Session的一个唯一标识
 - 通常是一个ID,通过这个ID可以匹配服务器端完整的Session数据
+
+
+# 单元测试
+- 单元测试的目的是隔离程序部件并证明单个部件是正确的
+- 单元测试主要有如下优势:
+  - 尽早发现问题并进行更正
+  - 简化集成测试的复杂度
+  - 生成文档,减少大量重复测试行为
+
+# 日志
+- 日志分类
+根据日志的用途,一般可以分为访问日志和应用日志。访问日志一般记录客户端对应用的访问信息。例如,在HTTP服务中主要记录HTTP请求头中的重要数据。一般来说,访问日志由应用统一记录。应用日志是开发者在应用中根据业务需要输出的调用跟踪、警告和异常信等信息,方便开发人员查看项目的运行状态和分析、排查Bug。应用日志包括debug、info、warn和error等不同级别。
+- 日志等级
+在记录日志时,为了便于管理和控制日志文件输出大小,通常需要按照级别来记录日志。log4js中的日志输出可以分为7个等级,日志级别由低到高排列如下。
+  - trace: 记录应用调用的跟踪信息,标记方法被调用,级别最低。
+  - debug: 记录调试信息,方便调试时使用。
+  - info: 记录非调试和跟踪的信息,相对来说是较为重要的信息。
+  - warn: 记录警告信息。
+  - error: 记录错误信息,这些错误不会导致服务完全不可用
+  - fatal: 记录严重错误信息,这些错误导致整个服务不可用
+
+
+# 日志的使用
+````javascript
+const log4js = require('log4js');
+log4js.configure({
+  appenders:{
+    cheese:{
+      type: 'file',
+      filename: 'cheese.log'
+    }
+  },
+  categories:{
+    default:{
+      appenders: ['cheese'],
+      level: 'error'
+    }
+  }
+})
+const logger = log4js.getLogger('cheese');
+````
+
+# 日志分割
+````javascript
+{
+  appenders:{
+    cheese:{
+      type: 'dateFile',
+      filename: 'logs/task',
+      pattern: '-yyyy-MM-dd.log',
+      alwaysIncludePattern: true
+    }
+  }
+}
+````

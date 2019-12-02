@@ -41,3 +41,27 @@
 # Restful
 - 开始时间: 2019年11月20日
 - 笔记: https://github.com/Lizhhhh/L-node/blob/master/Kaikeba/Restful/README.md
+
+
+# Event Loop
+一个循环,每次循环叫tick,每次循环的代码叫task
+- v8引擎单线程,无法同时干两件事
+- 文件读取、网络IO缓慢且具有不确定性
+- 要通过异步回调方式处理又称为异步IO
+- 先同步再异步,异步放入队列等同步完成后在执行,每次循环叫一个tick
+
+- `microtasks(微任务)`:
+唯一,整个事件循环当中,仅存在一个;执行为同步,同一个事件循环中的microtask会按队列顺序,串行执行完毕:
+  - process.nextTick
+  - promise.then
+  - Object.observe
+  - MutationObeserver
+
+- `task(宏任务)`:
+  - setTimeout
+  - setInterval
+  - setImmediate
+  - I/O
+  - UI渲染
+
+
