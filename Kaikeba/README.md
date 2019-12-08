@@ -165,3 +165,5 @@ module.exports = app =>{
 	router.get('/', controller.home.index);
 }
 ````
+
+# Sequelize学习
