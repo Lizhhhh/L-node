@@ -166,4 +166,3 @@ module.exports = app =>{
 }
 ````
 
-# Sequelize学习
