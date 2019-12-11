@@ -9,7 +9,6 @@ class Mar {
         this.service = new Service(this);
         this.controller = new Controller(this);
         this.router = new Router(this);
-
     }
     listen(port) {
         this.$app.listen(port, async () => {
@@ -36,6 +35,8 @@ class Controller {
     }
     async index(ctx) {
         const service = Controller.prototype.service;
+        const middleware = Controller.prototype.middleware;
+        middleware.test();
         ctx.body = await service.index();
     }
 }
@@ -132,6 +133,24 @@ class Model {
             const User = this.User();
             return await User.findAll();
         }
+    }
+}
+
+
+
+class Middleware {
+    constructor(conf) {
+        console.log('Middleware ok');
+    }
+    async logger(ctx, next) {
+        console.log(`${ctx.method} ${ctx.path}`);
+        const start = new Date();
+        await next();
+        const duration = new Date() - start;
+        console.log(`${ctx.method} ${ctx.path} `)
+    }
+    test() {
+        return 'Middleware Test';
     }
 }
 
