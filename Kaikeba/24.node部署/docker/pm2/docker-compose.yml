@@ -1,0 +1,7 @@
+mar2-pm2:
+  container_name: mar2-pm2
+  # 构建容器
+  # .表示指向当前的Dockerfile文件
+  build: .
+  ports:
+    - '3000:3000'
