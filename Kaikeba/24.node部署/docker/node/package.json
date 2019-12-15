@@ -1,0 +1,12 @@
+{
+    "name": "myapp",
+    "version": "1.0.0",
+    "main": "app.js",
+    "keywords": [],
+    "author": "marron",
+    "license": "ISC",
+    "description": "marron`s app for node with docker",
+    "devDependencies": {
+        "koa": "^2.7.0"
+    }
+}

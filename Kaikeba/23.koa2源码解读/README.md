@@ -13,4 +13,10 @@ app.use(ctx =>{
   ctx.body = 'hehe'
 })
 ````
-
+***
+# String.charAt(i)
+返回字符串的第i个位置的元素
+````javascript
+let str = '12345';
+console.log(str.charAt(0));    // '1'
+````

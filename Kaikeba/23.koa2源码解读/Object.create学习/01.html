@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+</head>
+
+<body>
+
+</body>
+<script>
+    const context = {
+        get url() {
+            return this.request.url
+        },
+        get body() {
+            return this.response.body
+        },
+        set body(val) {
+            this.response.body = val
+        }
+    }
+    const response = {
+        get body() {
+            return this._body
+        },
+        set body(val) {
+            this._body = val;
+        }
+    }
+    const request = {
+        get url() {
+            return this.req.url
+        }
+    }
+    const ctx = Object.create(context); // 将context的属性和方法挂载到ctx的prototype上面
+    ctx.request = Object.create(request);
+    ctx.response = Object.create(response);
+    console.log('ctx', ctx);
+</script>
+
+</html>
